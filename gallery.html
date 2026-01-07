@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Carmel High School, Gadchiroli</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="images/carmel-school-gad.png">
+    <style>
+        /* Dynamic Gallery Styles */
+        .dynamic-gallery-section {
+            padding: 60px 0;
+            background-color: var(--primary-gray);
+            position: relative;
+        }
+        
+        /* Desktop Filter Buttons */
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background-color: white;
+            border: 2px solid var(--primary-red);
+            border-radius: var(--border-radius);
+            color: var(--primary-red);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background-color: var(--primary-red);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* Mobile Dropdown Menu */
+        .mobile-filter-dropdown {
+            display: none;
+            margin-bottom: 30px;
+            padding: 0 20px;
+            position: relative;
+        }
+        
+        .dropdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background-color: white;
+            border: 2px solid var(--primary-red);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--primary-red);
+        }
+        
+        .dropdown-header i {
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown-header.active i {
+            transform: rotate(180deg);
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            right: 20px;
+            background-color: white;
+            border: 2px solid var(--primary-red);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            z-index: 100;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dropdown-menu.open {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .dropdown-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item:hover,
+        .dropdown-item.active {
+            background-color: var(--primary-red);
+            color: white;
+        }
+        
+        .dropdown-item:active {
+            background-color: var(--primary-dark-red);
+        }
+        
+        .dynamic-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 0 20px;
+        }
+        
+        .dynamic-gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            background: white;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+            height: 280px;
+            cursor: pointer;
+        }
+        
+        .dynamic-gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dynamic-gallery-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .dynamic-gallery-item:hover .dynamic-gallery-img {
+            transform: scale(1.05);
+        }
+        
+        .dynamic-gallery-caption {
+            padding: 15px;
+        }
+        
+        .dynamic-gallery-caption h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        
+        .dynamic-gallery-category {
+            display: inline-block;
+            background-color: var(--primary-red);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        
+        /* LIGHTBOX/MODAL STYLES */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .lightbox-modal.active {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 75vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .lightbox-caption {
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            padding: 0 20px;
+            max-width: 800px;
+        }
+        
+        .lightbox-caption h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .lightbox-caption p {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .lightbox-category {
+            display: inline-block;
+            background-color: var(--primary-red);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: white;
+            background: none;
+            border: none;
+            font-size: 40px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            opacity: 0.8;
+        }
+        
+        .lightbox-close:hover {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+        
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .lightbox-prev {
+            left: 20px;
+        }
+        
+        .lightbox-next {
+            right: 20px;
+        }
+        
+        .lightbox-counter {
+            position: absolute;
+            top: -50px;
+            left: 0;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        /* Improved Infinite Carousel */
+        .infinite-carousel {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            margin: 30px 0 60px;
+            padding: 20px 0;
+        }
+        
+        .carousel-track {
+            display: flex;
+            gap: 20px;
+            animation: scroll 30s linear infinite;
+        }
+        
+        /* Pause animation on hover */
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+        
+        /* Keyframe for continuous infinite scroll */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-300px * 5 - 20px * 5));
+            }
+        }
+        
+        .carousel-track img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .carousel-track img:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 0;
+            grid-column: 1 / -1;
+            text-align: center;
+        }
+        
+        .gallery-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .no-images-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            color: var(--text-gray);
+        }
+        
+        .gallery-admin-link {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+        }
+        
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--primary-red);
+            color: white;
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            /* Hide desktop buttons on mobile */
+            .gallery-filters {
+                display: none;
+            }
+            
+            /* Show mobile dropdown */
+            .mobile-filter-dropdown {
+                display: block;
+            }
+            
+            .dynamic-gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .carousel-track img {
+                width: 250px;
+                height: 150px;
+            }
+            
+            /* Lightbox adjustments for mobile */
+            .lightbox-nav {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .lightbox-prev {
+                left: 10px;
+            }
+            
+            .lightbox-next {
+                right: 10px;
+            }
+            
+            .lightbox-close {
+                top: 20px;
+                right: 20px;
+                font-size: 30px;
+            }
+            
+            .lightbox-counter {
+                top: 30px;
+                left: 20px;
+            }
+            
+            .lightbox-caption h3 {
+                font-size: 18px;
+            }
+            
+            .lightbox-caption p {
+                font-size: 14px;
+            }
+
+            .gallery-hero {
+                display: none;
+            }
+            
+            /* Adjust carousel animation for mobile */
+            @keyframes scroll {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(calc(-250px * 5 - 20px * 5));
+                }
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .dynamic-gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dynamic-gallery-item {
+                height: 250px;
+            }
+            
+            .dynamic-gallery-img {
+                height: 170px;
+            }
+            
+            .carousel-track img {
+                width: 220px;
+                height: 140px;
+            }
+            
+            /* Lightbox adjustments for small mobile */
+            .lightbox-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            
+            .lightbox-content {
+                max-width: 95%;
+            }
+            
+            .lightbox-img {
+                max-height: 65vh;
+            }
+            
+            /* Adjust carousel animation for small mobile */
+            @keyframes scroll {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(calc(-220px * 5 - 20px * 5));
+                }
+            }
+        }
+        
+        /* Desktop-only styles */
+        @media (min-width: 769px) {
+            .mobile-filter-dropdown {
+                display: none;
+            }
+            
+            .gallery-filters {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Update the mobile-header section in index.html -->
+    <header class="mobile-header">
+        <div class="mobile-header-container"> <!-- Add this wrapper -->
+            <a href="index.html" style="text-decoration: none;">
+                <div class="logo">
+                    <img src="images/carmel-school-gad.png" alt="" width="10%">
+                    <h2>Carmel High School</h2>
+                </div>
+            </a>
+            <div class="hamburger" id="mobileHamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <nav class="mobile-nav">
+            <div class="mobile-nav-links" id="mobileNavLinks">
+                <a href="#" class="active">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="disclosures.html">Disclosures</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="contacts.html">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Desktop Header - Only visible on desktop -->
+    <header class="desktop-header">
+        <!-- Utility Bar -->
+        <div class="utility-bar">
+            <div class="container utility-content">
+                <a href="index.html" style="text-decoration: none;">
+                    <div class="logo">
+                    <img src="images/carmel-school-gad.png" alt="" width="5%">
+                    <h2>Carmel High School</h2>
+                </div>
+                </a>
+                <div class="utility-info">
+                    <div class="info-item">
+                        <a href="https://maps.app.goo.gl/mGNbKYQAmGiyjG6eA" style="text-decoration: none; cursor: pointer" target="_blank">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </a>
+                        <span class="location">Dhanora Road, Dist. Gadchiroli 442605</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="far fa-clock"></i>
+                        <span>Mon-Sat 8:00AM - 5:00PM, <span class="highlight">Sunday CLOSED</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Opaque Navigation Bar -->
+        <nav class="main-nav">
+            <div class="container nav-content">
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="disclosures.html">Disclosures</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="contacts.html">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Gallery Hero Section -->
+    <section class="gallery-hero">
+        <div class="container">
+            <h1>School Gallery</h1>
+            <p>Explore the vibrant life at Carmel High School through our photo gallery. Capture moments of learning, achievements, events, and daily school life.</p>
+        </div>
+    </section>
+    
+    <!-- Improved Infinite Carousel -->
+    <section class="container">
+        <div class="infinite-carousel">
+            <div class="carousel-track" id="carouselTrack">
+                <!-- Images will be duplicated by JavaScript for seamless loop -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Dynamic Gallery Section -->
+    <section class="dynamic-gallery-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary-dark);">
+                Dynamic Photo Gallery
+            </h2>
+            
+            <!-- Desktop Category Filters -->
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-category="all">All Photos</button>
+                <button class="filter-btn" data-category="campus">Campus Life</button>
+                <button class="filter-btn" data-category="academic">Academic</button>
+                <button class="filter-btn" data-category="events">Events</button>
+                <button class="filter-btn" data-category="sports">Sports</button>
+                <button class="filter-btn" data-category="cultural">Cultural</button>
+                <button class="filter-btn" data-category="infrastructure">Infrastructure</button>
+                <button class="filter-btn" data-category="achievements">Achievements</button>
+            </div>
+            
+            <!-- Mobile Dropdown Filter -->
+            <div class="mobile-filter-dropdown">
+                <div class="dropdown-header" id="dropdownHeader">
+                    <span>All Photos</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="dropdown-item active" data-category="all">All Photos</div>
+                    <div class="dropdown-item" data-category="campus">Campus Life</div>
+                    <div class="dropdown-item" data-category="academic">Academic</div>
+                    <div class="dropdown-item" data-category="events">Events & Celebrations</div>
+                    <div class="dropdown-item" data-category="sports">Sports & Games</div>
+                    <div class="dropdown-item" data-category="cultural">Cultural Activities</div>
+                    <div class="dropdown-item" data-category="infrastructure">Infrastructure</div>
+                    <div class="dropdown-item" data-category="achievements">Achievements</div>
+                </div>
+            </div>
+            
+            <!-- Dynamic Gallery Grid -->
+            <div id="dynamicGallery" class="dynamic-gallery-grid">
+                <div class="gallery-loading">
+                    <div class="gallery-spinner"></div>
+                    <p>Loading gallery images...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Lightbox Modal -->
+    <div id="lightboxModal" class="lightbox-modal">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightboxClose">&times;</button>
+            <button class="lightbox-nav lightbox-prev" id="lightboxPrev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="lightbox-nav lightbox-next" id="lightboxNext">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <div class="lightbox-counter" id="lightboxCounter"></div>
+            
+            <img class="lightbox-img" id="lightboxImage" src="" alt="">
+            
+            <div class="lightbox-caption">
+                <h3 id="lightboxTitle"></h3>
+                <p id="lightboxDescription"></p>
+                <p><small id="lightboxDate"></small></p>
+                <div class="lightbox-category" id="lightboxCategory"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="images/carmel-school-gad.png" alt="Carmel School Logo" width="50">
+                        <h2>Carmel High School</h2>
+                    </div>
+                    <p class="footer-description">Providing Quality Education since 1972. We nurture young minds for a brighter future with values, discipline, and academic excellence.</p>
+                    <div class="social-icons">
+                        <a href="tel:7132232476"><i class="fa-solid fa-phone"></i></a>
+                        <a href="https://maps.app.goo.gl/mGNbKYQAmGiyjG6eA" target="_blank"><i class="fa-solid fa-location-dot"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="mailto:info@carmelhighschool.edu" target="_blank"><i class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="disclosures.html">Disclosures</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
+                        <li><a href="contacts.html">Contact</a></li>
+                        <li><a href="admissions.html">Admissions</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <div class="contact-info">
+                        <a href="https://maps.app.goo.gl/mGNbKYQAmGiyjG6eA" target="_blank">
+                            <p><i class="fas fa-map-marker-alt"></i>Dhanora Road, Dist. Gadchiroli 442605</p>
+                        </a>
+                        <a href="tel:07132232476" target="_blank">
+                            <p><i class="fas fa-phone"></i>07132-232476</p>
+                        </a>
+                        <a href="mailto:info@carmelhighschool.edu" target="_blank">
+                            <p><i class="fas fa-envelope"></i>info@carmelhighschool.edu</p>
+                        </a>
+                        <p><i class="fas fa-clock"></i> Mon-Sat: 8:00 AM - 5:00 PM</p>
+                        <p><i class="fas fa-calendar"></i> Sunday: CLOSED</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Carmel High School, Gadchiroli. All rights reserved.</p>
+                <p>Designed with ❤️ by 7Brothers.Co</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+    <script>
+        // ============================================
+        // GALLERY CONFIGURATION
+        // ============================================
+        const GALLERY_API_URL = 'https://script.google.com/macros/s/AKfycbz2y5P30vvl5yPaZJxmg3ayEk2onEMuSauN90T--eTChRG4kSxje6B7vvMYYpHPcJ_Nrg/exec';
+        
+        let galleryImages = [];
+        let currentFilter = 'all';
+        let currentDisplayedImages = [];
+        let currentImageIndex = 0;
+        
+        // Category display names
+        const categoryLabels = {
+            'campus': 'Campus Life',
+            'academic': 'Academic',
+            'events': 'Events & Celebrations',
+            'sports': 'Sports & Games',
+            'cultural': 'Cultural Activities',
+            'infrastructure': 'Infrastructure',
+            'achievements': 'Achievements',
+            'faculty': 'Faculty & Staff',
+            'student-life': 'Student Life'
+        };
+        
+        // ============================================
+        // LIGHTBOX/MODAL FUNCTIONS
+        // ============================================
+        function openLightbox(index) {
+            currentImageIndex = index;
+            updateLightbox();
+            document.getElementById('lightboxModal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+        
+        function updateLightbox() {
+            if (currentDisplayedImages.length === 0) return;
+            
+            const image = currentDisplayedImages[currentImageIndex];
+            const modal = document.getElementById('lightboxModal');
+            const imgElement = document.getElementById('lightboxImage');
+            const titleElement = document.getElementById('lightboxTitle');
+            const descElement = document.getElementById('lightboxDescription');
+            const dateElement = document.getElementById('lightboxDate');
+            const categoryElement = document.getElementById('lightboxCategory');
+            const counterElement = document.getElementById('lightboxCounter');
+            
+            // Set image
+            imgElement.src = image.imageUrl;
+            imgElement.alt = image.altText || image.caption;
+            
+            // Set caption
+            titleElement.textContent = image.caption || 'School Image';
+            descElement.textContent = image.description || '';
+            
+            // Set date if available
+            if (image.timestamp) {
+                const date = new Date(image.timestamp);
+                dateElement.textContent = `Uploaded: ${date.toLocaleDateString()}`;
+            } else {
+                dateElement.textContent = '';
+            }
+            
+            // Set category
+            if (image.category && categoryLabels[image.category]) {
+                categoryElement.textContent = categoryLabels[image.category];
+                categoryElement.style.display = 'inline-block';
+            } else {
+                categoryElement.style.display = 'none';
+            }
+            
+            // Update counter
+            counterElement.textContent = `${currentImageIndex + 1} / ${currentDisplayedImages.length}`;
+            
+            // Update navigation buttons
+            document.getElementById('lightboxPrev').style.display = 
+                currentImageIndex > 0 ? 'flex' : 'none';
+            document.getElementById('lightboxNext').style.display = 
+                currentImageIndex < currentDisplayedImages.length - 1 ? 'flex' : 'none';
+        }
+        
+        function nextImage() {
+            if (currentImageIndex < currentDisplayedImages.length - 1) {
+                currentImageIndex++;
+                updateLightbox();
+            }
+        }
+        
+        function prevImage() {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                updateLightbox();
+            }
+        }
+        
+        // Keyboard navigation
+        function handleKeydown(e) {
+            if (!document.getElementById('lightboxModal').classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    prevImage();
+                    break;
+                case 'ArrowRight':
+                    nextImage();
+                    break;
+            }
+        }
+        
+        // ============================================
+        // IMPROVED INFINITE CAROUSEL
+        // ============================================
+        function setupInfiniteCarousel() {
+            const carouselTrack = document.getElementById('carouselTrack');
+            
+            // Original images for the carousel
+            const carouselImages = [
+                { src: 'images/school-front.png', alt: 'School Building' },
+                { src: 'images/love-carmel.png', alt: 'Carmel Logo' },
+                { src: 'images/discussion-room.png', alt: 'Discussion Room' },
+                { src: 'images/school-side.png', alt: 'School Side View' },
+                { src: 'images/school-front.png', alt: 'School Building' }
+            ];
+            
+            // Clear existing content
+            carouselTrack.innerHTML = '';
+            
+            // To create a seamless infinite effect, we need to duplicate the images
+            // We'll create 3 sets to ensure smooth continuous scrolling
+            const totalSets = 3;
+            
+            for (let set = 0; set < totalSets; set++) {
+                carouselImages.forEach((img, index) => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = img.src;
+                    imgElement.alt = img.alt;
+                    imgElement.style.cursor = 'pointer';
+                    imgElement.addEventListener('click', () => {
+                        // When carousel image is clicked, show it in lightbox
+                        openCarouselImageInLightbox(img.src, img.alt);
+                    });
+                    carouselTrack.appendChild(imgElement);
+                });
+            }
+            
+            // Adjust animation speed based on screen width
+            const isMobile = window.innerWidth <= 768;
+            const isSmallMobile = window.innerWidth <= 480;
+            
+            // Calculate appropriate animation duration
+            let duration = 30; // Base duration in seconds
+            
+            if (isMobile) {
+                duration = 25;
+            }
+            if (isSmallMobile) {
+                duration = 20;
+            }
+            
+            // Apply animation
+            carouselTrack.style.animation = `scroll ${duration}s linear infinite`;
+        }
+        
+        function openCarouselImageInLightbox(src, alt) {
+            // Create a temporary image object for carousel images
+            const tempImage = {
+                imageUrl: src,
+                caption: alt,
+                altText: alt,
+                category: 'campus'
+            };
+            
+            currentDisplayedImages = [tempImage];
+            currentImageIndex = 0;
+            updateLightbox();
+            document.getElementById('lightboxModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // ============================================
+        // MOBILE DROPDOWN FUNCTIONS
+        // ============================================
+        function setupMobileDropdown() {
+            const dropdownHeader = document.getElementById('dropdownHeader');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            const desktopButtons = document.querySelectorAll('.filter-btn');
+            
+            // Toggle dropdown menu
+            dropdownHeader.addEventListener('click', () => {
+                dropdownHeader.classList.toggle('active');
+                dropdownMenu.classList.toggle('open');
+            });
+            
+            // Handle dropdown item selection
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all dropdown items
+                    dropdownItems.forEach(i => i.classList.remove('active'));
+                    
+                    // Add active class to selected item
+                    this.classList.add('active');
+                    
+                    // Update dropdown header text
+                    const category = this.getAttribute('data-category');
+                    const displayText = this.textContent;
+                    dropdownHeader.querySelector('span').textContent = displayText;
+                    
+                    // Update filter
+                    currentFilter = category;
+                    
+                    // Update desktop buttons
+                    desktopButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.getAttribute('data-category') === category) {
+                            btn.classList.add('active');
+                        }
+                    });
+                    
+                    // Display filtered gallery
+                    displayGallery(galleryImages);
+                    
+                    // Close dropdown
+                    dropdownHeader.classList.remove('active');
+                    dropdownMenu.classList.remove('open');
+                });
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.mobile-filter-dropdown')) {
+                    dropdownHeader.classList.remove('active');
+                    dropdownMenu.classList.remove('open');
+                }
+            });
+        }
+        
+        // ============================================
+        // DESKTOP FILTER FUNCTIONS
+        // ============================================
+        function setupDesktopFilters() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Get filter category
+                    currentFilter = this.getAttribute('data-category');
+                    
+                    // Update mobile dropdown
+                    dropdownItems.forEach(item => {
+                        item.classList.remove('active');
+                        if (item.getAttribute('data-category') === currentFilter) {
+                            item.classList.add('active');
+                            // Update dropdown header text
+                            document.querySelector('#dropdownHeader span').textContent = item.textContent;
+                        }
+                    });
+                    
+                    // Display filtered gallery
+                    displayGallery(galleryImages);
+                });
+            });
+        }
+        
+        // ============================================
+        // GALLERY FUNCTIONS
+        // ============================================
+        async function loadGallery() {
+            const galleryContainer = document.getElementById('dynamicGallery');
+            
+            try {
+                galleryContainer.innerHTML = `
+                    <div class="gallery-loading">
+                        <div class="gallery-spinner"></div>
+                        <p>Loading gallery images...</p>
+                    </div>
+                `;
+                
+                const response = await fetch(`${GALLERY_API_URL}?action=getAllImages`);
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    galleryImages = result.images || [];
+                    displayGallery(galleryImages);
+                    setupDesktopFilters();
+                } else {
+                    showError(`Failed to load images: ${result.error}`);
+                }
+            } catch (error) {
+                showError(`Network error: ${error.message}`);
+            }
+        }
+        
+        function displayGallery(images) {
+            const galleryContainer = document.getElementById('dynamicGallery');
+            
+            if (!images || images.length === 0) {
+                galleryContainer.innerHTML = `
+                    <div class="no-images-message">
+                        <i class="fas fa-images" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
+                        <h3>No images found</h3>
+                        <p>Check back soon for updates to our gallery!</p>
+                    </div>
+                `;
+                currentDisplayedImages = [];
+                return;
+            }
+            
+            // Sort by timestamp (newest first)
+            const sortedImages = [...images].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
+            
+            // Filter images based on current filter
+            let filteredImages = sortedImages;
+            if (currentFilter !== 'all') {
+                filteredImages = sortedImages.filter(img => img.category === currentFilter);
+            }
+            
+            // Store currently displayed images for lightbox navigation
+            currentDisplayedImages = filteredImages;
+            
+            let html = '';
+            
+            filteredImages.forEach((image, index) => {
+                const categoryLabel = categoryLabels[image.category] || image.category;
+                
+                html += `
+                    <div class="dynamic-gallery-item" data-index="${index}" data-category="${image.category}">
+                        <img src="${image.imageUrl}" 
+                             alt="${image.altText || image.caption}" 
+                             class="dynamic-gallery-img"
+                             onerror="this.src='images/placeholder.jpg'">
+                        <div class="dynamic-gallery-caption">
+                            <h3>${image.caption}</h3>
+
+                        </div>
+                    </div>
+                `;
+            });
+            
+            galleryContainer.innerHTML = html || `
+                <div class="no-images-message">
+                    <h3>No images in this category</h3>
+                    <p>Try selecting a different category.</p>
+                </div>
+            `;
+            
+            // Add click event listeners to gallery items
+            const galleryItems = document.querySelectorAll('.dynamic-gallery-item');
+            galleryItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    openLightbox(index);
+                });
+            });
+        }
+        
+        function showError(message) {
+            const galleryContainer = document.getElementById('dynamicGallery');
+            galleryContainer.innerHTML = `
+                <div class="no-images-message">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ff6b6b; margin-bottom: 15px;"></i>
+                    <h3>Unable to load gallery</h3>
+                    <p>${message}</p>
+                    <button onclick="loadGallery()" style="margin-top: 15px; padding: 10px 20px; background: var(--primary-red); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        Try Again
+                    </button>
+                </div>
+            `;
+            currentDisplayedImages = [];
+        }
+        
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up improved infinite carousel
+            setupInfiniteCarousel();
+            
+            // Set up mobile dropdown
+            setupMobileDropdown();
+            
+            // Load dynamic gallery
+            loadGallery();
+            
+            // Set up lightbox event listeners
+            document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+            document.getElementById('lightboxPrev').addEventListener('click', prevImage);
+            document.getElementById('lightboxNext').addEventListener('click', nextImage);
+            
+            // Close lightbox when clicking on background
+            document.getElementById('lightboxModal').addEventListener('click', (e) => {
+                if (e.target.id === 'lightboxModal') {
+                    closeLightbox();
+                }
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', handleKeydown);
+            
+            // Add fade-in animation for gallery items
+            const style = document.createElement('style');
+            style.textContent = `
+                .dynamic-gallery-item {
+                    opacity: 0;
+                    transform: translateY(20px);
+                    animation: fadeInUp 0.5s ease forwards;
+                }
+                
+                @keyframes fadeInUp {
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                /* Stagger animation for items */
+                .dynamic-gallery-item:nth-child(1) { animation-delay: 0.1s; }
+                .dynamic-gallery-item:nth-child(2) { animation-delay: 0.2s; }
+                .dynamic-gallery-item:nth-child(3) { animation-delay: 0.3s; }
+                .dynamic-gallery-item:nth-child(4) { animation-delay: 0.4s; }
+                .dynamic-gallery-item:nth-child(5) { animation-delay: 0.5s; }
+                .dynamic-gallery-item:nth-child(6) { animation-delay: 0.6s; }
+                .dynamic-gallery-item:nth-child(7) { animation-delay: 0.7s; }
+                .dynamic-gallery-item:nth-child(8) { animation-delay: 0.8s; }
+                .dynamic-gallery-item:nth-child(9) { animation-delay: 0.9s; }
+                .dynamic-gallery-item:nth-child(10) { animation-delay: 1s; }
+            `;
+            document.head.appendChild(style);
+            
+            // Adjust carousel on window resize
+            window.addEventListener('resize', setupInfiniteCarousel);
+        });
+    </script>
+</body>
+</html>
