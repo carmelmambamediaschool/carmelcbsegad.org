@@ -2075,17 +2075,17 @@ main {
 /* ===== DISCLOSURES PAGE STYLES ===== */
 .disclosures-hero {
     padding-top: 140px;
-    padding-bottom: 60px;
-    background-color: white;
-}
-
-.disclosures-content {
-    max-width: 800px;
-    margin: 0 auto;
+    padding-bottom: 40px;
+    background-color: var(--primary-gray);
     text-align: center;
 }
 
-.disclosures-content h1 {
+.disclosures-hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.disclosures-hero h1 {
     font-family: 'Montserrat', sans-serif;
     font-size: 48px;
     font-weight: 800;
@@ -2093,58 +2093,353 @@ main {
     margin-bottom: 20px;
 }
 
-.disclosures-content p {
+.disclosures-hero p {
     font-size: 18px;
     line-height: 1.6;
     color: var(--text-gray);
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
+/* ===== DISCLOSURES MAIN CONTENT SECTION ===== */
+/* ===== DISCLOSURES MAIN CONTENT SECTION ===== */
+.disclosures-main {
+    padding: 20px 20px;
+    background-color: white;
+}
+
+.disclosures-main .container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* PDF Filter Styles - Simplified */
+.pdf-filter {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-gray);
+    border-radius: 15px;
+    padding: 20px 25px;
+    margin: 0 auto 40px;
+    text-align: left;
+    box-shadow: var(--box-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.filter-icon {
+    color: var(--primary-red);
+    font-size: 24px;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.pdf-select {
+    flex: 1;
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--primary-dark);
+    background-color: white;
+    cursor: pointer;
+    appearance: none;
+    transition: all 0.3s ease;
+    min-width: 0; /* This helps with flexbox overflow */
+}
+
+.pdf-select:hover {
+    border-color: var(--primary-red);
+}
+
+.pdf-select:focus {
+    outline: none;
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.dropdown-arrow {
+    position: absolute;
+    right: 40px;
+    color: var(--text-gray);
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+/* PDF Viewer Container */
 .pdf-viewer-container {
-    margin: 40px auto;
+    margin: 0 auto 40px;
     border-radius: 15px;
     overflow: hidden;
     box-shadow: var(--box-shadow);
-    max-width: 1000px;
+    background-color: white;
+    width: 100%;
+}
+
+.pdf-viewer-container h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    padding: 25px 30px 15px;
+    text-align: left;
+    margin: 0;
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.pdf-wrapper {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    height: 1000px;
 }
 
 .pdf-viewer {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 600px;
+    height: 100%;
     border: none;
+}
+
+/* PDF Info */
+.pdf-viewer-container .pdf-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background-color: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.pdf-viewer-container .pdf-desc {
+    flex: 1;
+    text-align: left;
+    font-size: 14px;
+    color: var(--text-gray);
+    margin: 0;
+    min-width: 200px;
+}
+
+.pdf-viewer-container .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--primary-red);
+    color: white;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.pdf-viewer-container .download-btn:hover {
+    background-color: #ff5252;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
 }
 
 .pdf-note {
     text-align: center;
     font-size: 14px;
     color: var(--text-gray);
-    margin-top: 15px;
-    font-style: italic;
+    margin: 0;
+    padding: 20px;
+    background-color: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.pdf-note a {
+    color: var(--primary-red);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.pdf-note a:hover {
+    color: #ff5252;
+    text-decoration: underline;
+}
+
+/* Disclosures Notes */
+.disclosures-notes {
+    background-color: var(--primary-gray);
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 40px;
+}
+
+.disclosures-notes h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.disclosures-notes ul {
+    text-align: left;
+    list-style-position: inside;
+    margin: 0;
+    padding-left: 0;
+}
+
+.disclosures-notes li {
+    color: var(--text-gray);
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.disclosures-notes li:last-child {
+    margin-bottom: 0;
 }
 
 /* Disclosures Page Responsive */
 @media (max-width: 768px) {
-    .disclosures-content h1 {
+    .disclosures-hero {
+        padding-top: 100px;
+        padding-bottom: 30px;
+    }
+    
+    .disclosures-hero h1 {
         font-size: 36px;
     }
+    
+    .disclosures-hero p {
+        font-size: 16px;
+    }
+    
+    .disclosures-main {
+        padding: 0px 15px;
+    }
+    
+    /* Mobile-optimized PDF filter */
+    .pdf-filter {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+        margin-bottom: 30px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .filter-icon {
+        margin-right: 0;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    
+    .pdf-select {
+        width: 100%;
+        padding: 12px 40px 12px 15px;
+        box-sizing: border-box;
+        font-size: 15px;
+    }
+    
+    .dropdown-arrow {
+        right: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    /* Adjust PDF info for mobile */
+    .pdf-viewer-container .pdf-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    
+    .pdf-viewer-container .pdf-desc {
+        min-width: auto;
+        padding-right: 0;
+        margin-bottom: 0;
+    }
+    
+    .pdf-viewer-container .download-btn {
+        align-self: flex-start;
+    }
+    
+    .pdf-viewer-container h3 {
+        font-size: 20px;
+        padding: 20px;
+    }
 
-    .pdf-viewer {
+    .pdf-wrapper {
         height: 400px;
+    }
+    
+    .disclosures-notes {
+        padding: 20px;
+    }
+    
+    .disclosures-notes h2 {
+        font-size: 24px;
     }
 }
 
 @media (max-width: 480px) {
-    .disclosures-hero {
-        padding-top: 100px;
-        padding-bottom: 40px;
-    }
-
-    .disclosures-content h1 {
+    .disclosures-hero h1 {
         font-size: 28px;
     }
+    
+    .disclosures-main {
+        padding: 0px 10px;
+    }
+    
+    .pdf-filter {
+        padding: 12px;
+    }
+    
+    .pdf-select {
+        padding: 10px 35px 10px 12px;
+        font-size: 14px;
+    }
+    
+    .dropdown-arrow {
+        right: 20px;
+    }
+    
+    .pdf-viewer-container h3 {
+        font-size: 18px;
+        padding: 15px;
+    }
+    
+    .pdf-note {
+        padding: 15px;
+        font-size: 13px;
+    }
+    
+    .pdf-viewer-container .pdf-info {
+        padding: 15px;
+    }
+    
+    .pdf-viewer-container .pdf-desc {
+        font-size: 13px;
+    }
+}
 
-    .pdf-viewer {
-        height: 300px;
+/* Mobile-specific: Hide hero section on mobile */
+@media (max-width: 768px) {
+    .disclosures-hero {
+        display: none;
+    }
+    
+    .disclosures-main {
+        padding-top: 80px; /* Give space for mobile header */
     }
 }
 
