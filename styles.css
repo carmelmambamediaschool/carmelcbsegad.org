@@ -1966,8 +1966,7 @@ main {
 
 /* ===== ABOUT PAGE STYLES ===== */
 .about-hero {
-    padding-top: 140px;
-    padding-bottom: 80px;
+    padding-top: 160px;
     background-color: var(--primary-gray);
 }
 
@@ -2003,6 +2002,7 @@ main {
     font-weight: 800;
     color: var(--primary-dark);
     margin-bottom: 20px;
+    margin-top: 20px;
     line-height: 1.2;
 }
 
@@ -2017,7 +2017,7 @@ main {
 .about-text p {
     font-size: 16px;
     line-height: 1.8;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     color: var(--text-gray);
 }
 
@@ -2063,15 +2063,156 @@ main {
 
 @media (max-width: 480px) {
     .about-hero {
-        padding-top: 100px;
-        padding-bottom: 40px;
+        padding-top: 50px;
     }
 
     .about-text h1 {
         font-size: 28px;
     }
 }
+/* ===== UPDATED ABOUT PAGE STRUCTURE ===== */
+.about-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+    margin-bottom: 60px;
+}
 
+.about-details {
+    padding: 10px 0;
+    background-color: white;
+}
+
+.about-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about-mission {
+    text-align: center;
+    margin-bottom: 60px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about-mission h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary-red);
+    margin: 40px 0 20px;
+}
+
+.about-mission p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--text-gray);
+    margin-bottom: 30px;
+}
+
+.about-features {
+    text-align: center;
+}
+
+.about-features h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary-red);
+    margin-bottom: 40px;
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.feature-item {
+    background-color: var(--primary-gray);
+    padding: 30px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-red);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.feature-item i {
+    font-size: 40px;
+    color: var(--primary-red);
+    margin-bottom: 20px;
+}
+
+.feature-item h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 10px;
+}
+
+.feature-item p {
+    font-size: 15px;
+    color: var(--text-gray);
+    line-height: 1.6;
+}
+
+.about-features > p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--text-gray);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Mobile Responsive Styles for About Page */
+@media (max-width: 768px) {
+    .about-intro {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        margin-bottom: 0px;
+    }
+    
+    .about-details {
+        padding: 0;
+    }
+    
+    .about-mission h2,
+    .about-features h2 {
+        font-size: 28px;
+    }
+    
+    .features-list {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .feature-item {
+        padding: 20px;
+    }
+    
+    .about-mission p,
+    .about-features > p {
+        font-size: 16px;
+        padding: 0 10px;
+    }
+}
+
+/* Tablet Responsive */
+@media (max-width: 992px) and (min-width: 769px) {
+    .features-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 /* ===== DISCLOSURES PAGE STYLES ===== */
 .disclosures-hero {
     padding-top: 140px;
