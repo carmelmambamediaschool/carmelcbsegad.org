@@ -825,9 +825,10 @@
         // STATE MANAGEMENT
         // ============================================
         
-        let galleryImages = [];
+        let galleryImages = [];          // Master list from DB
         let currentFilter = 'all';
-        let currentDisplayedImages = [];
+        let currentDisplayedImages = []; // The list the lightbox is currently iterating over
+        let mainGalleryList = [];        // NEW: Stores the full list of images currently visible in the grid
         let currentImageIndex = 0;
         
         const categoryLabels = {
@@ -872,7 +873,7 @@
                 setupDesktopFilters();
                 setupMobileDropdown();
                 
-                // 3. Setup Top Carousel (New Addition)
+                // 3. Setup Top Carousel
                 setupInfiniteCarousel(galleryImages);
                 
             } catch (error) {
@@ -888,20 +889,13 @@
             const track = document.getElementById('carouselTrack');
             if (!track) return;
             
-            // If images from DB are empty (or error), use fallback or empty
             const sourceImages = (images && images.length > 0) ? images : []; 
-            
-            if (sourceImages.length === 0) {
-                // Optional: Fallback hardcoded images if DB is empty
-                return; 
-            }
+            if (sourceImages.length === 0) return; 
 
             track.innerHTML = '';
             
-            // Pick top 8 images (or fewer)
+            // Pick top 8 images
             const carouselImages = sourceImages.slice(0, 8);
-            
-            // Duplicate sets for seamless scroll (3 sets is usually enough)
             const displaySets = 3;
             
             for (let i = 0; i < displaySets; i++) {
@@ -922,6 +916,7 @@
         }
 
         function openCarouselImageInLightbox(image) {
+            // Carousel specific: Lightbox only shows this ONE image
             currentDisplayedImages = [image];
             currentImageIndex = 0;
             updateLightbox();
@@ -939,14 +934,12 @@
             
             if (!dropdownHeader || !dropdownMenu) return;
 
-            // Toggle Menu
             dropdownHeader.onclick = (e) => {
                 e.stopPropagation();
                 dropdownMenu.classList.toggle('open');
                 dropdownHeader.classList.toggle('active');
             };
 
-            // Close when clicking outside
             document.addEventListener('click', (e) => {
                 if (!dropdownHeader.contains(e.target) && !dropdownMenu.contains(e.target)) {
                     dropdownMenu.classList.remove('open');
@@ -954,7 +947,6 @@
                 }
             });
 
-            // Handle Selection
             dropdownItems.forEach(item => {
                 item.onclick = function() {
                     dropdownItems.forEach(i => i.classList.remove('active'));
@@ -987,6 +979,7 @@
                     </div>
                 `;
                 currentDisplayedImages = [];
+                mainGalleryList = []; // Clear main list
                 return;
             }
             
@@ -995,9 +988,13 @@
                 filteredImages = images.filter(img => img.category === currentFilter);
             }
             
-            currentDisplayedImages = filteredImages;
+            // KEY FIX: Update the persistent "Grid State"
+            mainGalleryList = filteredImages;
+            // Also sync current displayed images (initial state)
+            currentDisplayedImages = mainGalleryList;
             
             let html = '';
+            // We use filteredImages here to generate the HTML
             filteredImages.forEach((image, index) => {
                 html += `
                     <div class="dynamic-gallery-item" onclick="openLightbox(${index})">
@@ -1035,6 +1032,11 @@
         // ============================================
         
         window.openLightbox = function(index) {
+            // KEY FIX: Restore the "Grid List" to the lightbox.
+            // This ensures that if the Carousel was clicked previously (which reduces the list to 1),
+            // we overwrite it back to the full album list.
+            currentDisplayedImages = mainGalleryList;
+
             currentImageIndex = index;
             updateLightbox();
             document.getElementById('lightboxModal').classList.add('active');
@@ -1047,9 +1049,11 @@
         }
 
         window.updateLightbox = function() {
-            if (currentDisplayedImages.length === 0) return;
-            // Prevent index overflow
+            if (!currentDisplayedImages || currentDisplayedImages.length === 0) return;
+            
+            // Safety check for index
             if (currentImageIndex >= currentDisplayedImages.length) currentImageIndex = 0;
+            if (currentImageIndex < 0) currentImageIndex = 0;
             
             const image = currentDisplayedImages[currentImageIndex];
             
@@ -1064,13 +1068,18 @@
             
             document.getElementById('lightboxCounter').textContent = `${currentImageIndex + 1} / ${currentDisplayedImages.length}`;
             
-            document.getElementById('lightboxPrev').style.display = currentImageIndex > 0 ? 'flex' : 'none';
-            document.getElementById('lightboxNext').style.display = currentImageIndex < currentDisplayedImages.length - 1 ? 'flex' : 'none';
+            // Show/Hide Arrows based on list length
+            document.getElementById('lightboxPrev').style.display = (currentDisplayedImages.length > 1) ? 'flex' : 'none';
+            document.getElementById('lightboxNext').style.display = (currentDisplayedImages.length > 1) ? 'flex' : 'none';
         }
 
         window.nextImage = function() {
             if (currentImageIndex < currentDisplayedImages.length - 1) {
                 currentImageIndex++;
+                updateLightbox();
+            } else {
+                // Optional: Loop back to start
+                currentImageIndex = 0;
                 updateLightbox();
             }
         }
@@ -1079,6 +1088,10 @@
             if (currentImageIndex > 0) {
                 currentImageIndex--;
                 updateLightbox();
+            } else {
+                // Optional: Loop to end
+                currentImageIndex = currentDisplayedImages.length - 1;
+                updateLightbox();
             }
         }
 
@@ -1086,7 +1099,6 @@
         // INITIALIZATION
         // ============================================
         document.addEventListener('DOMContentLoaded', () => {
-             // Re-attach listeners for lightbox elements
              const closeBtn = document.getElementById('lightboxClose');
              const prevBtn = document.getElementById('lightboxPrev');
              const nextBtn = document.getElementById('lightboxNext');
@@ -1095,12 +1107,6 @@
              if(prevBtn) prevBtn.addEventListener('click', window.prevImage);
              if(nextBtn) nextBtn.addEventListener('click', window.nextImage);
              
-             /* REMOVED: Hamburger menu logic that was here.
-                We rely on script.js to handle the hamburger menu 
-                to avoid the "Double Toggle" issue.
-             */
-             
-             // Start Loading
              window.loadGallery = loadGallery;
              loadGallery();
         });
