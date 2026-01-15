@@ -802,18 +802,34 @@
     </footer>
     
     <script src="script.js"></script>
-    <script>
+    <script type="module">
+        // 1. Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // 2. Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-ZK1L8Tn46uNggFaWAVXsMpcs32RcQlE",
+            authDomain: "carmel-gallery-database.firebaseapp.com",
+            projectId: "carmel-gallery-database",
+            storageBucket: "carmel-gallery-database.firebasestorage.app",
+            messagingSenderId: "608667644518",
+            appId: "1:608667644518:web:e92f6446e8761f497a33a7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const COLLECTION_NAME = "gallery";
+
         // ============================================
-        // GALLERY CONFIGURATION
+        // STATE MANAGEMENT
         // ============================================
-        const GALLERY_API_URL = 'https://script.google.com/macros/s/AKfycbwjvabDIR8UThlAK0TeNEYlZUgtsYy_CK8-RsYgPkrg9gtWdUWtSYDg4-FuCjTcfvSU/exec';
         
         let galleryImages = [];
         let currentFilter = 'all';
         let currentDisplayedImages = [];
         let currentImageIndex = 0;
         
-        // Category display names
         const categoryLabels = {
             'campus': 'Campus Life',
             'academic': 'Academic',
@@ -825,266 +841,9 @@
             'faculty': 'Faculty & Staff',
             'student-life': 'Student Life'
         };
-        
+
         // ============================================
-        // LIGHTBOX/MODAL FUNCTIONS
-        // ============================================
-        function openLightbox(index) {
-            currentImageIndex = index;
-            updateLightbox();
-            document.getElementById('lightboxModal').classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
-        }
-        
-        function closeLightbox() {
-            document.getElementById('lightboxModal').classList.remove('active');
-            document.body.style.overflow = ''; // Restore scrolling
-        }
-        
-        function updateLightbox() {
-            if (currentDisplayedImages.length === 0) return;
-            
-            const image = currentDisplayedImages[currentImageIndex];
-            const modal = document.getElementById('lightboxModal');
-            const imgElement = document.getElementById('lightboxImage');
-            const titleElement = document.getElementById('lightboxTitle');
-            const descElement = document.getElementById('lightboxDescription');
-            const dateElement = document.getElementById('lightboxDate');
-            const categoryElement = document.getElementById('lightboxCategory');
-            const counterElement = document.getElementById('lightboxCounter');
-            
-            // Set image
-            imgElement.src = image.imageUrl;
-            imgElement.alt = image.altText || image.caption;
-            
-            // Set caption
-            titleElement.textContent = image.caption || 'School Image';
-            descElement.textContent = image.description || '';
-            
-            // Set date if available
-            if (image.timestamp) {
-                const date = new Date(image.timestamp);
-                dateElement.textContent = `Uploaded: ${date.toLocaleDateString()}`;
-            } else {
-                dateElement.textContent = '';
-            }
-            
-            // Set category
-            if (image.category && categoryLabels[image.category]) {
-                categoryElement.textContent = categoryLabels[image.category];
-                categoryElement.style.display = 'inline-block';
-            } else {
-                categoryElement.style.display = 'none';
-            }
-            
-            // Update counter
-            counterElement.textContent = `${currentImageIndex + 1} / ${currentDisplayedImages.length}`;
-            
-            // Update navigation buttons
-            document.getElementById('lightboxPrev').style.display = 
-                currentImageIndex > 0 ? 'flex' : 'none';
-            document.getElementById('lightboxNext').style.display = 
-                currentImageIndex < currentDisplayedImages.length - 1 ? 'flex' : 'none';
-        }
-        
-        function nextImage() {
-            if (currentImageIndex < currentDisplayedImages.length - 1) {
-                currentImageIndex++;
-                updateLightbox();
-            }
-        }
-        
-        function prevImage() {
-            if (currentImageIndex > 0) {
-                currentImageIndex--;
-                updateLightbox();
-            }
-        }
-        
-        // Keyboard navigation
-        function handleKeydown(e) {
-            if (!document.getElementById('lightboxModal').classList.contains('active')) return;
-            
-            switch(e.key) {
-                case 'Escape':
-                    closeLightbox();
-                    break;
-                case 'ArrowLeft':
-                    prevImage();
-                    break;
-                case 'ArrowRight':
-                    nextImage();
-                    break;
-            }
-        }
-        
-        // ============================================
-        // IMPROVED INFINITE CAROUSEL
-        // ============================================
-        function setupInfiniteCarousel() {
-            const carouselTrack = document.getElementById('carouselTrack');
-            
-            // Original images for the carousel
-            const carouselImages = [
-                { src: 'images/school-front.webp', alt: 'School Building of Carmel High School Gadchiroli' },
-                { src: 'https://lh3.googleusercontent.com/d/1F4SffSlCrD6jUBkHGl0HDYUy3x_3BnA-=w400', alt: 'Cultural Events at Carmel High School Gadchiroli' },
-                { src: 'images/love-carmel.webp', alt: 'Logo of Carmel High School Gadchiroli' },
-                { src: 'https://lh3.googleusercontent.com/d/1710DT91TNDmDYBENQSIT0wbPP_8enOqi=w400', alt: 'Sports day at Carmel High School Gadchiroli' },
-                { src: 'images/discussion-room.webp', alt: 'Discussion Room at Carmel High School Gadchiroli' },
-                { src: 'https://lh3.googleusercontent.com/d/1Des36NF4wr89HsaqqndjUj1gZqBydYzw=w400', alt: 'Science Fair at Carmel High School Gadchiroli' },
-                { src: 'images/school-side.webp', alt: 'School Side View of Carmel High School Gadchiroli' },
-                { src: 'https://lh3.googleusercontent.com/d/17Je_i2V1Xt0zaUU_kGZgxUJGyUq5Y0D_=w400', alt: 'Republic Day at Carmel High School Gadchiroli' },
-            ];
-            
-            // Clear existing content
-            carouselTrack.innerHTML = '';
-            
-            // To create a seamless infinite effect, we need to duplicate the images
-            // We'll create 3 sets to ensure smooth continuous scrolling
-            const totalSets = 11;
-            
-            for (let set = 0; set < totalSets; set++) {
-                carouselImages.forEach((img, index) => {
-                    const imgElement = document.createElement('img');
-                    imgElement.src = img.src;
-                    imgElement.alt = img.alt;
-                    imgElement.style.cursor = 'pointer';
-                    imgElement.addEventListener('click', () => {
-                        // When carousel image is clicked, show it in lightbox
-                        openCarouselImageInLightbox(img.src, img.alt);
-                    });
-                    carouselTrack.appendChild(imgElement);
-                });
-            }
-            
-            // Adjust animation speed based on screen width
-            const isMobile = window.innerWidth <= 768;
-            const isSmallMobile = window.innerWidth <= 480;
-            
-            // Calculate appropriate animation duration
-            let duration = 30; // Base duration in seconds
-            
-            if (isMobile) {
-                duration = 25;
-            }
-            if (isSmallMobile) {
-                duration = 20;
-            }
-            
-            // Apply animation
-            carouselTrack.style.animation = `scroll ${duration}s linear infinite`;
-        }
-        
-        function openCarouselImageInLightbox(src, alt) {
-            // Create a temporary image object for carousel images
-            const tempImage = {
-                imageUrl: src,
-                caption: alt,
-                altText: alt,
-                category: 'campus'
-            };
-            
-            currentDisplayedImages = [tempImage];
-            currentImageIndex = 0;
-            updateLightbox();
-            document.getElementById('lightboxModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        // ============================================
-        // MOBILE DROPDOWN FUNCTIONS
-        // ============================================
-        function setupMobileDropdown() {
-            const dropdownHeader = document.getElementById('dropdownHeader');
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            const dropdownItems = document.querySelectorAll('.dropdown-item');
-            const desktopButtons = document.querySelectorAll('.filter-btn');
-            
-            // Toggle dropdown menu
-            dropdownHeader.addEventListener('click', () => {
-                dropdownHeader.classList.toggle('active');
-                dropdownMenu.classList.toggle('open');
-            });
-            
-            // Handle dropdown item selection
-            dropdownItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Remove active class from all dropdown items
-                    dropdownItems.forEach(i => i.classList.remove('active'));
-                    
-                    // Add active class to selected item
-                    this.classList.add('active');
-                    
-                    // Update dropdown header text
-                    const category = this.getAttribute('data-category');
-                    const displayText = this.textContent;
-                    dropdownHeader.querySelector('span').textContent = displayText;
-                    
-                    // Update filter
-                    currentFilter = category;
-                    
-                    // Update desktop buttons
-                    desktopButtons.forEach(btn => {
-                        btn.classList.remove('active');
-                        if (btn.getAttribute('data-category') === category) {
-                            btn.classList.add('active');
-                        }
-                    });
-                    
-                    // Display filtered gallery
-                    displayGallery(galleryImages);
-                    
-                    // Close dropdown
-                    dropdownHeader.classList.remove('active');
-                    dropdownMenu.classList.remove('open');
-                });
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(event) {
-                if (!event.target.closest('.mobile-filter-dropdown')) {
-                    dropdownHeader.classList.remove('active');
-                    dropdownMenu.classList.remove('open');
-                }
-            });
-        }
-        
-        // ============================================
-        // DESKTOP FILTER FUNCTIONS
-        // ============================================
-        function setupDesktopFilters() {
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const dropdownItems = document.querySelectorAll('.dropdown-item');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    // Get filter category
-                    currentFilter = this.getAttribute('data-category');
-                    
-                    // Update mobile dropdown
-                    dropdownItems.forEach(item => {
-                        item.classList.remove('active');
-                        if (item.getAttribute('data-category') === currentFilter) {
-                            item.classList.add('active');
-                            // Update dropdown header text
-                            document.querySelector('#dropdownHeader span').textContent = item.textContent;
-                        }
-                    });
-                    
-                    // Display filtered gallery
-                    displayGallery(galleryImages);
-                });
-            });
-        }
-        
-        // ============================================
-        // GALLERY FUNCTIONS
+        // MAIN LOAD FUNCTION
         // ============================================
         async function loadGallery() {
             const galleryContainer = document.getElementById('dynamicGallery');
@@ -1097,26 +856,125 @@
                     </div>
                 `;
                 
-                const response = await fetch(`${GALLERY_API_URL}?action=getAllImages`);
+                // Get data from Firestore
+                const q = query(collection(db, COLLECTION_NAME), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
                 
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.status}`);
-                }
+                galleryImages = [];
+                querySnapshot.forEach((doc) => {
+                    galleryImages.push({ id: doc.id, ...doc.data() });
+                });
                 
-                const result = await response.json();
+                // 1. Display the Grid
+                displayGallery(galleryImages);
                 
-                if (result.success) {
-                    galleryImages = result.images || [];
-                    displayGallery(galleryImages);
-                    setupDesktopFilters();
-                } else {
-                    showError(`Failed to load images: ${result.error}`);
-                }
+                // 2. Setup Filters (Desktop & Mobile)
+                setupDesktopFilters();
+                setupMobileDropdown();
+                
+                // 3. Setup Top Carousel (New Addition)
+                setupInfiniteCarousel(galleryImages);
+                
             } catch (error) {
-                showError(`Network error: ${error.message}`);
+                console.error("Firebase Error:", error);
+                galleryContainer.innerHTML = `<div class="no-images-message">Error loading gallery. Please try again later.</div>`;
             }
         }
-        
+
+        // ============================================
+        // CAROUSEL LOGIC
+        // ============================================
+        function setupInfiniteCarousel(images) {
+            const track = document.getElementById('carouselTrack');
+            if (!track) return;
+            
+            // If images from DB are empty (or error), use fallback or empty
+            const sourceImages = (images && images.length > 0) ? images : []; 
+            
+            if (sourceImages.length === 0) {
+                // Optional: Fallback hardcoded images if DB is empty
+                return; 
+            }
+
+            track.innerHTML = '';
+            
+            // Pick top 8 images (or fewer)
+            const carouselImages = sourceImages.slice(0, 8);
+            
+            // Duplicate sets for seamless scroll (3 sets is usually enough)
+            const displaySets = 3;
+            
+            for (let i = 0; i < displaySets; i++) {
+                carouselImages.forEach((img) => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = img.imageUrl;
+                    imgElement.alt = img.caption;
+                    imgElement.onerror = function() { this.style.display = 'none'; };
+                    
+                    // Click Listener
+                    imgElement.addEventListener('click', () => {
+                        openCarouselImageInLightbox(img);
+                    });
+                    
+                    track.appendChild(imgElement);
+                });
+            }
+        }
+
+        function openCarouselImageInLightbox(image) {
+            currentDisplayedImages = [image];
+            currentImageIndex = 0;
+            updateLightbox();
+            document.getElementById('lightboxModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ============================================
+        // MOBILE DROPDOWN LOGIC
+        // ============================================
+        function setupMobileDropdown() {
+            const dropdownHeader = document.getElementById('dropdownHeader');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            
+            if (!dropdownHeader || !dropdownMenu) return;
+
+            // Toggle Menu
+            dropdownHeader.onclick = (e) => {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('open');
+                dropdownHeader.classList.toggle('active');
+            };
+
+            // Close when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!dropdownHeader.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.remove('open');
+                    dropdownHeader.classList.remove('active');
+                }
+            });
+
+            // Handle Selection
+            dropdownItems.forEach(item => {
+                item.onclick = function() {
+                    dropdownItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const selectedText = this.textContent;
+                    dropdownHeader.querySelector('span').textContent = selectedText;
+                    
+                    dropdownMenu.classList.remove('open');
+                    dropdownHeader.classList.remove('active');
+                    
+                    currentFilter = this.getAttribute('data-category');
+                    displayGallery(galleryImages);
+                };
+            });
+        }
+
+        // ============================================
+        // DISPLAY & FILTERING
+        // ============================================
         function displayGallery(images) {
             const galleryContainer = document.getElementById('dynamicGallery');
             
@@ -1125,138 +983,128 @@
                     <div class="no-images-message">
                         <i class="fas fa-images" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
                         <h3>No images found</h3>
-                        <p>Check back soon for updates to our gallery!</p>
+                        <p>Check back soon for updates!</p>
                     </div>
                 `;
                 currentDisplayedImages = [];
                 return;
             }
             
-            // Sort by timestamp (newest first)
-            const sortedImages = [...images].sort((a, b) => 
-                new Date(b.timestamp) - new Date(a.timestamp)
-            );
-            
-            // Filter images based on current filter
-            let filteredImages = sortedImages;
+            let filteredImages = images;
             if (currentFilter !== 'all') {
-                filteredImages = sortedImages.filter(img => img.category === currentFilter);
+                filteredImages = images.filter(img => img.category === currentFilter);
             }
             
-            // Store currently displayed images for lightbox navigation
             currentDisplayedImages = filteredImages;
             
             let html = '';
-            
             filteredImages.forEach((image, index) => {
-                const categoryLabel = categoryLabels[image.category] || image.category;
-                
                 html += `
-                    <div class="dynamic-gallery-item" data-index="${index}" data-category="${image.category}">
+                    <div class="dynamic-gallery-item" onclick="openLightbox(${index})">
                         <img src="${image.imageUrl}" 
-                             alt="${image.altText || image.caption || 'Photo from Carmel High School Gadchiroli'}" 
+                             alt="${image.altText || image.caption}" 
                              class="dynamic-gallery-img"
                              onerror="this.src='images/placeholder.jpg'">
                         <div class="dynamic-gallery-caption">
                             <h3>${image.caption}</h3>
-
+                            <span class="dynamic-gallery-category">${categoryLabels[image.category] || image.category}</span>
                         </div>
                     </div>
                 `;
             });
             
             galleryContainer.innerHTML = html || `
-                <div class="no-images-message">
-                    <h3>No images in this category</h3>
-                    <p>Try selecting a different category.</p>
-                </div>
+                <div class="no-images-message"><h3>No images found in this category</h3></div>
             `;
-            
-            // Add click event listeners to gallery items
-            const galleryItems = document.querySelectorAll('.dynamic-gallery-item');
-            galleryItems.forEach((item, index) => {
-                item.addEventListener('click', () => {
-                    openLightbox(index);
+        }
+
+        function setupDesktopFilters() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-category');
+                    displayGallery(galleryImages);
                 });
             });
         }
+
+        // ============================================
+        // LIGHTBOX FUNCTIONS
+        // ============================================
         
-        function showError(message) {
-            const galleryContainer = document.getElementById('dynamicGallery');
-            galleryContainer.innerHTML = `
-                <div class="no-images-message">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ff6b6b; margin-bottom: 15px;"></i>
-                    <h3>Unable to load gallery</h3>
-                    <p>${message}</p>
-                    <button onclick="loadGallery()" style="margin-top: 15px; padding: 10px 20px; background: var(--primary-red); color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Try Again
-                    </button>
-                </div>
-            `;
-            currentDisplayedImages = [];
+        window.openLightbox = function(index) {
+            currentImageIndex = index;
+            updateLightbox();
+            document.getElementById('lightboxModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
         
+        window.closeLightbox = function() {
+            document.getElementById('lightboxModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        window.updateLightbox = function() {
+            if (currentDisplayedImages.length === 0) return;
+            // Prevent index overflow
+            if (currentImageIndex >= currentDisplayedImages.length) currentImageIndex = 0;
+            
+            const image = currentDisplayedImages[currentImageIndex];
+            
+            document.getElementById('lightboxImage').src = image.imageUrl;
+            document.getElementById('lightboxTitle').textContent = image.caption;
+            document.getElementById('lightboxCategory').textContent = categoryLabels[image.category] || image.category;
+            
+            const dateStr = image.timestamp ? new Date(image.timestamp).toLocaleDateString('en-IN', {
+                day: 'numeric', month: 'short', year: 'numeric'
+            }) : '';
+            document.getElementById('lightboxDate').textContent = dateStr;
+            
+            document.getElementById('lightboxCounter').textContent = `${currentImageIndex + 1} / ${currentDisplayedImages.length}`;
+            
+            document.getElementById('lightboxPrev').style.display = currentImageIndex > 0 ? 'flex' : 'none';
+            document.getElementById('lightboxNext').style.display = currentImageIndex < currentDisplayedImages.length - 1 ? 'flex' : 'none';
+        }
+
+        window.nextImage = function() {
+            if (currentImageIndex < currentDisplayedImages.length - 1) {
+                currentImageIndex++;
+                updateLightbox();
+            }
+        }
+        
+        window.prevImage = function() {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                updateLightbox();
+            }
+        }
+
         // ============================================
         // INITIALIZATION
         // ============================================
         document.addEventListener('DOMContentLoaded', () => {
-            // Set up improved infinite carousel
-            setupInfiniteCarousel();
-            
-            // Set up mobile dropdown
-            setupMobileDropdown();
-            
-            // Load dynamic gallery
-            loadGallery();
-            
-            // Set up lightbox event listeners
-            document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
-            document.getElementById('lightboxPrev').addEventListener('click', prevImage);
-            document.getElementById('lightboxNext').addEventListener('click', nextImage);
-            
-            // Close lightbox when clicking on background
-            document.getElementById('lightboxModal').addEventListener('click', (e) => {
-                if (e.target.id === 'lightboxModal') {
-                    closeLightbox();
-                }
-            });
-            
-            // Keyboard navigation
-            document.addEventListener('keydown', handleKeydown);
-            
-            // Add fade-in animation for gallery items
-            const style = document.createElement('style');
-            style.textContent = `
-                .dynamic-gallery-item {
-                    opacity: 0;
-                    transform: translateY(20px);
-                    animation: fadeInUp 0.5s ease forwards;
-                }
-                
-                @keyframes fadeInUp {
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-                
-                /* Stagger animation for items */
-                .dynamic-gallery-item:nth-child(1) { animation-delay: 0.1s; }
-                .dynamic-gallery-item:nth-child(2) { animation-delay: 0.2s; }
-                .dynamic-gallery-item:nth-child(3) { animation-delay: 0.3s; }
-                .dynamic-gallery-item:nth-child(4) { animation-delay: 0.4s; }
-                .dynamic-gallery-item:nth-child(5) { animation-delay: 0.5s; }
-                .dynamic-gallery-item:nth-child(6) { animation-delay: 0.6s; }
-                .dynamic-gallery-item:nth-child(7) { animation-delay: 0.7s; }
-                .dynamic-gallery-item:nth-child(8) { animation-delay: 0.8s; }
-                .dynamic-gallery-item:nth-child(9) { animation-delay: 0.9s; }
-                .dynamic-gallery-item:nth-child(10) { animation-delay: 1s; }
-            `;
-            document.head.appendChild(style);
-            
-            // Adjust carousel on window resize
-            window.addEventListener('resize', setupInfiniteCarousel);
+             // Re-attach listeners for lightbox elements
+             const closeBtn = document.getElementById('lightboxClose');
+             const prevBtn = document.getElementById('lightboxPrev');
+             const nextBtn = document.getElementById('lightboxNext');
+             
+             if(closeBtn) closeBtn.addEventListener('click', window.closeLightbox);
+             if(prevBtn) prevBtn.addEventListener('click', window.prevImage);
+             if(nextBtn) nextBtn.addEventListener('click', window.nextImage);
+             
+             /* REMOVED: Hamburger menu logic that was here.
+                We rely on script.js to handle the hamburger menu 
+                to avoid the "Double Toggle" issue.
+             */
+             
+             // Start Loading
+             window.loadGallery = loadGallery;
+             loadGallery();
         });
+
     </script>
 </body>
 </html>
