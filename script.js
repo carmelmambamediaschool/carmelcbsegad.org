@@ -106,7 +106,7 @@ navItems.forEach(item => {
 
 // CTA button interaction
 learnMoreBtn.addEventListener('click', () => {
-    alert('Thank you for your interest! We will redirect you to learn more about our amazing playground.');
+    window.location.href = 'about.html';
     // In a real implementation, this would redirect to a page
     // window.location.href = 'about.html';
 });
