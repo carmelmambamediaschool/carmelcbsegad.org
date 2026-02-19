@@ -348,7 +348,7 @@ body {
 }
 
 .hero-background {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -2943,5 +2943,19 @@ main {
 
     .map-container {
         height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-overlay {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+    }
+    
+    .mobile-header {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background-color: rgba(255, 255, 255, 0.95);
     }
 }

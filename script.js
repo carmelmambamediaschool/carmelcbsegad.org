@@ -105,57 +105,85 @@ navItems.forEach(item => {
 });
 
 // CTA button interaction
-learnMoreBtn.addEventListener('click', () => {
-    window.location.href = 'about.html';
-    // In a real implementation, this would redirect to a page
-    // window.location.href = 'about.html';
-});
+if(learnMoreBtn) {
+    learnMoreBtn.addEventListener('click', () => {
+        window.location.href = 'about.html';
+    });
+}
 
 // Slideshow controls
-prevSlideBtn.addEventListener('click', () => {
-    prevSlide();
-    stopSlideshow();
-    startSlideshow(); // Restart the interval
-});
+if(prevSlideBtn) {
+    prevSlideBtn.addEventListener('click', () => {
+        prevSlide();
+        stopSlideshow();
+        startSlideshow(); // Restart the interval
+    });
+}
 
-nextSlideBtn.addEventListener('click', () => {
-    nextSlide();
-    stopSlideshow();
-    startSlideshow(); // Restart the interval
-});
+if(nextSlideBtn) {
+    nextSlideBtn.addEventListener('click', () => {
+        nextSlide();
+        stopSlideshow();
+        startSlideshow(); // Restart the interval
+    });
+}
 
 // Pause slideshow on hover (now on hero section)
-heroSection.addEventListener('mouseenter', stopSlideshow);
-heroSection.addEventListener('mouseleave', startSlideshow);
+if(heroSection) {
+    heroSection.addEventListener('mouseenter', stopSlideshow);
+    heroSection.addEventListener('mouseleave', startSlideshow);
+}
 
-// Add scroll effect to both headers
-window.addEventListener('scroll', () => {
-    const scrollPosition = window.scrollY;
-    const heroHeight = heroSection.offsetHeight;
+
+// --- OPTIMIZED SCROLL LISTENER START ---
+let heroHeight = heroSection ? heroSection.offsetHeight : window.innerHeight;
+let ticking = false;
+
+window.addEventListener('resize', () => {
+    heroHeight = heroSection ? heroSection.offsetHeight : window.innerHeight;
+    adjustHeroContentPadding();
     
-    // Calculate how far we've scrolled into the hero section
-    const scrollProgress = scrollPosition / heroHeight;
-    
-    // Apply scrolled class to both headers
-    if (scrollPosition > 50) {
-        desktopHeader.classList.add('scrolled');
-        mobileHeader.classList.add('scrolled');
-        mainNav.classList.add('scrolled');
-    } else {
-        desktopHeader.classList.remove('scrolled');
-        mobileHeader.classList.remove('scrolled');
-        mainNav.classList.remove('scrolled');
-    }
-    
-    // Adjust desktop header transparency based on scroll
-    if (scrollPosition < heroHeight && desktopHeader) {
-        // Gradually increase opacity as we scroll down
-        const opacity = 0.3 + (scrollProgress * 0.65); // From 0.3 to 0.95
-        desktopHeader.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
-    } else if (desktopHeader) {
-        desktopHeader.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+    // Close mobile menu if open and switching to desktop view
+    if (window.innerWidth > 768 && mobileNavLinks.classList.contains('active')) {
+        mobileNavLinks.classList.remove('active');
+        mobileHamburger.classList.remove('active');
     }
 });
+
+// Add scroll effect to both headers using requestAnimationFrame
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            const scrollPosition = window.scrollY;
+            const scrollProgress = scrollPosition / heroHeight;
+            
+            // Apply scrolled class to both headers
+            if (scrollPosition > 50) {
+                if(desktopHeader) desktopHeader.classList.add('scrolled');
+                if(mobileHeader) mobileHeader.classList.add('scrolled');
+                if(mainNav) mainNav.classList.add('scrolled');
+            } else {
+                if(desktopHeader) desktopHeader.classList.remove('scrolled');
+                if(mobileHeader) mobileHeader.classList.remove('scrolled');
+                if(mainNav) mainNav.classList.remove('scrolled');
+            }
+            
+            // Adjust desktop header transparency based on scroll
+            if (scrollPosition < heroHeight && desktopHeader) {
+                // Gradually increase opacity as we scroll down
+                const opacity = 0.3 + (scrollProgress * 0.65); // From 0.3 to 0.95
+                desktopHeader.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
+            } else if (desktopHeader) {
+                desktopHeader.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+            }
+            
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
+// --- OPTIMIZED SCROLL LISTENER END ---
+
 
 // Initialize the website
 function initWebsite() {
@@ -172,7 +200,8 @@ function initWebsite() {
 // Adjust hero content padding based on current header
 function adjustHeroContentPadding() {
     const heroContent = document.querySelector('.hero-content');
-    
+    if(!heroContent) return;
+
     // Check which header is currently visible
     const isMobileView = window.innerWidth <= 768;
     
@@ -187,17 +216,6 @@ function adjustHeroContentPadding() {
 
 // Run initialization when DOM is loaded
 document.addEventListener('DOMContentLoaded', initWebsite);
-
-// Adjust on window resize
-window.addEventListener('resize', () => {
-    adjustHeroContentPadding();
-    
-    // Close mobile menu if open and switching to desktop view
-    if (window.innerWidth > 768 && mobileNavLinks.classList.contains('active')) {
-        mobileNavLinks.classList.remove('active');
-        mobileHamburger.classList.remove('active');
-    }
-});
 
 // Facilities Carousel
 const facilitiesCarousel = document.getElementById('facilities-carousel');
@@ -268,25 +286,37 @@ if (facilitiesCarousel) {
     facilitiesCarousel.addEventListener('mouseleave', startFacilityAutoSlide);
 }
 
-// Statistics Counter Animation
+
+// --- OPTIMIZED COUNTER ANIMATION START ---
 const statNumbers = document.querySelectorAll('.stat-number');
 
 function animateCounter(element) {
     const target = parseInt(element.getAttribute('data-target'));
     const duration = 2000;
-    const step = target / (duration / 16);
-    let current = 0;
+    let startTimestamp = null;
     
-    const timer = setInterval(() => {
-        current += step;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        
+        // easeOutQuart easing for a smooth deceleration
+        const easeProgress = 1 - Math.pow(1 - progress, 4);
+        const current = Math.floor(easeProgress * target);
+        
+        element.textContent = current;
+        
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        } else {
+            element.textContent = target;
             element.classList.add('animated');
         }
-        element.textContent = Math.floor(current);
-    }, 16);
+    };
+    
+    window.requestAnimationFrame(step);
 }
+// --- OPTIMIZED COUNTER ANIMATION END ---
+
 
 // Intersection Observer for animations
 const observerOptions = {
