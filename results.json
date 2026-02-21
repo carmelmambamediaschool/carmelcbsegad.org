@@ -1,0 +1,91 @@
+{
+    "2024": {
+        "10": {
+            "totalStudents": 88,
+            "averagePercentage": 90.1,
+            "distinctions": 78,
+            "firstClass": 10,
+            "students": []
+        }
+    },
+    "2025": {
+        "10": {
+            "totalStudents": 85,
+            "averagePercentage": 89.2,
+            "distinctions": 72,
+            "firstClass": 13,
+            "students": [
+                {
+                    "id": 1,
+                    "name": "Akshay D. Meshram",
+                    "percentage": 93.2,
+                    "image": "https://drive.google.com/thumbnail?id=1o1RHTP2CVTfbxRTGvDFACv39B58z5tFP&sz=w400",
+                    "rank": 1
+                },
+                {
+                    "id": 2,
+                    "name": "Prajyoti M. Kumbhare",
+                    "percentage": 89.8,
+                    "image": "https://drive.google.com/thumbnail?id=108m58vlNMNcBYlpRQmsegsvPbrWmTfp6&sz=w400",
+                    "rank": 2
+                },
+                {
+                    "id": 3,
+                    "name": "Aniket G. Bhandekar",
+                    "percentage": 77.2,
+                    "image": "https://drive.google.com/thumbnail?id=16xBiIJC9hRAgJcIu_G5zInzOmWwmjEbI&sz=w400",
+                    "rank": 3
+                },
+                {
+                    "id": 4,
+                    "name": "Himanshu S. Lohambare",
+                    "percentage": 76.4,
+                    "image": "https://drive.google.com/thumbnail?id=1tBpkv2hlrkl4RcFLDpk2I7IwvXvJf4An&sz=w400",
+                    "rank": 4
+                },
+                {
+                    "id": 5,
+                    "name": "Shruti Khushal Urade",
+                    "percentage": 74.8,
+                    "image": "https://drive.google.com/thumbnail?id=1MOF8i0wKWYi-9Jpd0LgOv8yfTPZcr0rW&sz=w400",
+                    "rank": 5
+                },
+                {
+                    "id": 6,
+                    "name": "Swanandi V. Brahmanwade",
+                    "percentage": 74.4,
+                    "image": "https://drive.google.com/thumbnail?id=1PeUNeFWbu5T5YkkFMb9Dhmrkrmhr5m05&sz=w400",
+                    "rank": 6
+                },
+                {
+                    "id": 7,
+                    "name": "Priya Subhash Mandal",
+                    "percentage": 72.6,
+                    "image": "https://drive.google.com/thumbnail?id=1uZ0JdmdrNl2E2CP-aFpKPCJn5bpDHSnw&sz=w400",
+                    "rank": 7
+                },
+                {
+                    "id": 8,
+                    "name": "Aditi Mohan Warjurkar",
+                    "percentage": 71.4,
+                    "image": "https://drive.google.com/thumbnail?id=1P9FUVVSIKB-wGWmFsfNLvntNsPIFLbpd&sz=w400",
+                    "rank": 8
+                },
+                {
+                    "id": 9,
+                    "name": "Purvansh H. Meshram",
+                    "percentage": 69.4,
+                    "image": "https://drive.google.com/thumbnail?id=1DZJ0Ctzivaqtw7y5mbx8c_ClSy3_eqDf&sz=w400",
+                    "rank": 9
+                },
+                {
+                    "id": 10,
+                    "name": "Nivedita Kaliram Usendi",
+                    "percentage": 67.4,
+                    "image": "https://drive.google.com/thumbnail?id=196UD23Krr_gIMm4HPKujsOMx9orTxT6U&sz=w400",
+                    "rank": 10
+                }
+            ]
+        }
+    }
+}

@@ -89,38 +89,44 @@
         
         .academic-year-selector h3 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        
-        .year-buttons {
-            display: flex;
+
+        /* NEW YEAR TOGGLE STYLES */
+        .year-toggle-btn {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .year-dropdown {
-            display: none;
-        }
-        
-        .year-btn {
-            padding: 10px 25px;
-            border: 2px solid var(--primary-red);
+            gap: 15px;
+            padding: 12px 30px;
             background: white;
             color: var(--primary-red);
+            border: 2px solid var(--primary-red);
             border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: 600;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            user-select: none;
+            min-width: 250px;
         }
-        
-        .year-btn.active, .year-btn:hover {
+
+        .year-toggle-btn:hover {
             background: var(--primary-red);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.2);
+        }
+
+        .year-toggle-btn i {
+            font-size: 18px;
         }
         
         .results-grid {
@@ -145,14 +151,14 @@
         }
         
         .student-image {
-            height: 220px;
+            height: 280px;
             overflow: hidden;
         }
         
         .student-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit:contain;
             transition: transform 0.5s ease;
         }
         
@@ -207,6 +213,7 @@
             font-weight: 800;
             font-size: 18px;
             box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+            z-index: 2;
         }
         
         .topper-badge {
@@ -220,6 +227,7 @@
             font-size: 12px;
             font-weight: 700;
             box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+            z-index: 2;
         }
         
         .statistics-section {
@@ -271,52 +279,26 @@
             color: var(--primary-red);
         }
         
-        /* Mobile Styles for Year Selector */
+        /* Mobile Styles */
         @media (max-width: 768px) {
-            .year-buttons {
-                display: none;
-            }
-            
-            .year-dropdown {
-                display: block;
-                margin: 20px auto 0;
-                max-width: 300px;
-            }
-            
-            .year-dropdown select {
-                width: 100%;
-                padding: 12px 20px;
-                border: 2px solid var(--primary-red);
-                border-radius: 50px;
-                background: white;
-                color: var(--primary-red);
-                font-size: 16px;
-                font-weight: 600;
-                cursor: pointer;
-                appearance: none;
-                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff6b6b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-                background-repeat: no-repeat;
-                background-position: right 20px center;
-                background-size: 20px;
-                padding-right: 50px;
-            }
-            
             .results-hero h1 {
                 font-size: 36px;
             }
-            
             .results-hero p {
                 font-size: 16px;
                 padding: 0 15px;
             }
-
             .results-hero {
                 display: none;
             }
-            
             .results-grid {
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
                 gap: 20px;
+            }
+            .year-toggle-btn {
+                font-size: 18px;
+                padding: 10px 20px;
+                min-width: 200px;
             }
         }
         
@@ -324,72 +306,51 @@
             .results-grid {
                 grid-template-columns: 1fr;
             }
-            
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 15px;
             }
-            
             .stat-item {
                 padding: 20px 15px;
             }
-            
             .stat-number {
                 font-size: 32px;
             }
-            
             .academic-year-selector h3 {
-                font-size: 20px;
+                font-size: 16px;
             }
-        }
-        
-        @media (max-width: 360px) {
-            .results-grid {
-                gap: 15px;
-            }
-            
-            .student-image {
-                height: 180px;
-            }
-        }
-
-        /* Fix for stats grid overflow on very small screens */
-        @media (max-width: 480px) {
             .statistics-section {
                 padding: 40px 15px;
                 margin: 40px 0 20px;
                 border-radius: 15px;
             }
-            
             .stats-grid {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-            
-            .stat-item {
-                padding: 20px 15px;
-            }
         }
         
         @media (max-width: 360px) {
+            .results-grid {
+                gap: 15px;
+            }
+            .student-image {
+                height: 220px;
+            }
             .statistics-section {
                 padding: 30px 10px;
                 margin: 30px 0 15px;
             }
-            
             .stat-item {
                 padding: 15px 10px;
             }
-            
             .stat-number {
                 font-size: 28px;
             }
         }
-
     </style>
 </head>
 <body>
-    <!-- Mobile Header -->
     <header class="mobile-header">
         <div class="mobile-header-container">
             <a href="index.html" style="text-decoration: none;">
@@ -416,7 +377,6 @@
         </nav>
     </header>
 
-    <!-- Desktop Header -->
     <header class="desktop-header">
         <div class="utility-bar">
             <div class="container utility-content">
@@ -455,7 +415,6 @@
         </nav>
     </header>
     
-    <!-- Results Hero Section (Simplified) -->
     <section class="results-hero">
         <div class="container">
             <h1>Class 10th Results</h1>
@@ -463,33 +422,14 @@
         </div>
     </section>
     
-    <!-- Results Container -->
     <section class="results-container">
         <div class="container">
-            <!-- Academic Year Selector (Now in results container) -->
             <div class="academic-year-selector">
-                <h3>Select Academic Year</h3>
-                
-                <!-- Desktop: Buttons -->
-                <div class="year-buttons">
-                    <button class="year-btn" data-year="2024">2023-2024</button>
-                    <button class="year-btn active" data-year="2023">2022-2023</button>
-                    <button class="year-btn" data-year="2022">2021-2022</button>
-                    <button class="year-btn" data-year="2021">2020-2021</button>
-                </div>
-                
-                <!-- Mobile: Dropdown -->
-                <div class="year-dropdown">
-                    <select id="yearSelect">
-                        <option value="2024">2023-2024</option>
-                        <option value="2023" selected>2022-2023</option>
-                        <option value="2022">2021-2022</option>
-                        <option value="2021">2020-2021</option>
-                    </select>
-                </div>
+                <h3>Viewing Academic Year</h3>
+                <button id="yearToggleBtn" class="year-toggle-btn">
+                    </button>
             </div>
             
-            <!-- Results Grid -->
             <div id="resultsGrid" class="results-grid">
                 <div class="loading">
                     <i class="fas fa-spinner fa-spin"></i>
@@ -497,9 +437,8 @@
                 </div>
             </div>
             
-            <!-- Statistics Section (Moved below results) -->
             <div class="statistics-section">
-                <h2 class="section-title">Result Statistics</h2>
+                <h2 class="section-title" style="text-align: center; margin-bottom: 20px;">Result Statistics</h2>
                 <div class="stats-grid">
                     <div class="stat-item">
                         <div class="stat-number" id="totalStudents">0</div>
@@ -522,7 +461,6 @@
         </div>
     </section>
     
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -571,7 +509,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2026 Carmel High School, Gadchiroli. All rights reserved.</p>
+                <p>© 2026 Carmel High School, Gadchiroli. All rights reserved.</p>
                 <p>Designed by <a href="https://portfolio.mambaclub.site/" target="_blank" style="text-decoration: none; color:azure">MAMBA <span style="color: #ff4444;">MEDIA</span></a></p>
             </div>
         </div>
@@ -579,152 +517,12 @@
     
     <script src="script.js"></script>
     <script>
-        // Results JSON Data Structure
-        const resultsData = {
-            "2023": {
-                "10": {
-                    "totalStudents": 85,
-                    "averagePercentage": 89.2,
-                    "distinctions": 72,
-                    "firstClass": 13,
-                    "students": [
-                        {
-                            "id": 1,
-                            "name": "Akshay D. Meshram",
-                            "percentage": 93.2,
-                            "image": "https://drive.google.com/thumbnail?id=1o1RHTP2CVTfbxRTGvDFACv39B58z5tFP&sz=w400",
-                            "rank": 1
-                        },
-                        {
-                            "id": 2,
-                            "name": "Prajyoti M. Kumbhare",
-                            "percentage": 89.8,
-                            "image": "https://drive.google.com/thumbnail?id=108m58vlNMNcBYlpRQmsegsvPbrWmTfp6&sz=w400",
-                            "rank": 2
-                        },
-                        {
-                            "id": 3,
-                            "name": "Aniket G. Bhandekar",
-                            "percentage": 77.2,
-                            "image": "https://drive.google.com/thumbnail?id=16xBiIJC9hRAgJcIu_G5zInzOmWwmjEbI&sz=w400",
-                            "rank": 3
-                        },
-                        {
-                            "id": 4,
-                            "name": "Himanshu S. Lohambare",
-                            "percentage": 76.4,
-                            "image": "https://drive.google.com/thumbnail?id=1tBpkv2hlrkl4RcFLDpk2I7IwvXvJf4An&sz=w400",
-                            "rank": 4
-                        },
-                        {
-                            "id": 5,
-                            "name": "Shruti Khushal Urade",
-                            "percentage": 74.8,
-                            "image": "https://drive.google.com/thumbnail?id=1MOF8i0wKWYi-9Jpd0LgOv8yfTPZcr0rW&sz=w400",
-                            "rank": 5
-                        },
-                        {
-                            "id": 6,
-                            "name": "Swanandi V. Brahmanwade",
-                            "percentage": 74.4,
-                            "image": "https://drive.google.com/thumbnail?id=1PeUNeFWbu5T5YkkFMb9Dhmrkrmhr5m05&sz=w400",
-                            "rank": 6
-                        },
-                        {
-                            "id": 7,
-                            "name": "Priya Subhash Mandal",
-                            "percentage": 72.6,
-                            "image": "https://drive.google.com/thumbnail?id=1uZ0JdmdrNl2E2CP-aFpKPCJn5bpDHSnw&sz=w400",
-                            "rank": 7
-                        },
-                        {
-                            "id": 8,
-                            "name": "Aditi Mohan Warjurkar",
-                            "percentage": 71.4,
-                            "image": "https://drive.google.com/thumbnail?id=1P9FUVVSIKB-wGWmFsfNLvntNsPIFLbpd&sz=w400",
-                            "rank": 8
-                        },
-                        {
-                            "id": 9,
-                            "name": "Purvansh H. Meshram",
-                            "percentage": 69.4,
-                            "image": "https://drive.google.com/thumbnail?id=1DZJ0Ctzivaqtw7y5mbx8c_ClSy3_eqDf&sz=w400",
-                            "rank": 9
-                        },
-                        {
-                            "id": 10,
-                            "name": "Nivedita Kaliram Usendi",
-                            "percentage": 67.4,
-                            "image": "https://drive.google.com/thumbnail?id=196UD23Krr_gIMm4HPKujsOMx9orTxT6U&sz=w400",
-                            "rank": 10
-                        }
-                    ]
-                }
-            },
-            "2022": {
-                "10": {
-                    "totalStudents": 80,
-                    "averagePercentage": 87.5,
-                    "distinctions": 65,
-                    "firstClass": 15,
-                    "students": []
-                }
-            },
-            "2021": {
-                "10": {
-                    "totalStudents": 75,
-                    "averagePercentage": 85.8,
-                    "distinctions": 60,
-                    "firstClass": 15,
-                    "students": []
-                }
-            },
-            "2024": {
-                "10": {
-                    "totalStudents": 88,
-                    "averagePercentage": 90.1,
-                    "distinctions": 78,
-                    "firstClass": 10,
-                    "students": []
-                }
-            }
-        };
+        let availableYears = [];
+        let currentYearIndex = 0; 
+        let resultsData = {};
 
-        // DOM Elements
-        let currentYear = "2023";
-
-        // Initialize Results Page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadResults(currentYear);
-            
-            // Year buttons event listeners (Desktop)
-            document.querySelectorAll('.year-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentYear = this.getAttribute('data-year');
-                    loadResults(currentYear);
-                    
-                    // Update dropdown selection
-                    document.getElementById('yearSelect').value = currentYear;
-                });
-            });
-            
-            // Dropdown event listener (Mobile)
-            document.getElementById('yearSelect').addEventListener('change', function() {
-                currentYear = this.value;
-                loadResults(currentYear);
-                
-                // Update buttons selection
-                document.querySelectorAll('.year-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.getAttribute('data-year') === currentYear) {
-                        btn.classList.add('active');
-                    }
-                });
-            });
-            
-            // Update mobile menu for this page
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Update active state in mobile nav
             const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
             mobileLinks.forEach(link => {
                 if (link.getAttribute('href') === 'results.html') {
@@ -733,12 +531,78 @@
                     link.classList.remove('active');
                 }
             });
+
+            // Fetch data from external JSON
+            try {
+                const response = await fetch('results.json');
+                if (!response.ok) throw new Error('Network response was not ok');
+                resultsData = await response.json();
+                
+                // --- THE MAGIC HAPPENS HERE ---
+                // 1. Get all the year keys from the JSON and sort them highest to lowest
+                const years = Object.keys(resultsData).sort((a, b) => b - a);
+                
+                // 2. Automatically build the labels based on whatever is in the JSON
+                availableYears = years.map(year => {
+                    return {
+                        key: year,
+                        label: `${parseInt(year) - 1}-${year}` // e.g., turns "2024" into "2023-2024"
+                    };
+                });
+                
+                // Initialize UI with fetched data
+                if (availableYears.length > 0) {
+                    updateToggleUI();
+                    loadResults(availableYears[currentYearIndex].key);
+                } else {
+                    throw new Error("No year data found in JSON");
+                }
+                
+            } catch (error) {
+                console.error("Error loading results JSON data:", error);
+                document.getElementById('resultsGrid').innerHTML = '<div class="loading"><i class="fas fa-exclamation-triangle"></i><p>Failed to load results data. Please ensure results.json is available and properly formatted.</p></div>';
+            }
+
+            // Setup toggle button click listener
+            const toggleBtn = document.getElementById('yearToggleBtn');
+            if(toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    // Only toggle if we have more than 1 year of data
+                    if (availableYears.length > 1) {
+                        // Switch between 0 and 1
+                        currentYearIndex = currentYearIndex === 0 ? 1 : 0;
+                        updateToggleUI();
+                        loadResults(availableYears[currentYearIndex].key);
+                    }
+                });
+            }
         });
 
-        // Load results function
-        function loadResults(year) {
+        // Updates the text and arrow direction of the button based on active year
+        function updateToggleUI() {
+            const toggleBtn = document.getElementById('yearToggleBtn');
+            if (!toggleBtn || availableYears.length === 0) return;
+            
+            // If there's only one year in the JSON, just show the label without arrows
+            if (availableYears.length === 1) {
+                toggleBtn.innerHTML = `<span>${availableYears[0].label}</span>`;
+                toggleBtn.style.cursor = 'default';
+                return;
+            }
+
+            if (currentYearIndex === 0) {
+                // Showing Current Year: Arrow points LEFT to indicate going BACK to Previous Year
+                toggleBtn.innerHTML = `<i class="fas fa-chevron-left"></i> <span>${availableYears[0].label}</span>`;
+            } else {
+                // Showing Previous Year: Arrow points RIGHT to indicate going FORWARD to Current Year
+                toggleBtn.innerHTML = `<span>${availableYears[1].label}</span> <i class="fas fa-chevron-right"></i>`;
+            }
+        }
+
+        // Load results into DOM
+        function loadResults(yearKey) {
             const resultsGrid = document.getElementById('resultsGrid');
-            const data = resultsData[year]?.[10];
+            const data = resultsData[yearKey]?.["10"];
             
             if (!data) {
                 resultsGrid.innerHTML = '<div class="loading"><i class="fas fa-exclamation-circle"></i><p>No results available for this selection</p></div>';
@@ -768,7 +632,6 @@
                         <div class="student-info">
                             <div class="student-name">${student.name}</div>
                             <div class="percentage-badge">${student.percentage}%</div>
-                            <div class="student-class">Class 10 (SSC)</div>
                         </div>
                     </div>
                     `;
@@ -790,6 +653,8 @@
         // Animate counter function
         function animateCounter(elementId, targetValue, isPercentage = false) {
             const element = document.getElementById(elementId);
+            if (!element) return;
+            
             const duration = 1500;
             const step = targetValue / (duration / 16);
             let current = 0;
