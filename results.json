@@ -1,19 +1,17 @@
 {
     "2024": {
         "10": {
-            "totalStudents": 88,
-            "averagePercentage": 90.1,
-            "distinctions": 78,
-            "firstClass": 10,
+            "totalStudents": 24,
+            "successRate": 100,
+            "firstClass": 7,
             "students": []
         }
     },
     "2025": {
         "10": {
-            "totalStudents": 85,
-            "averagePercentage": 89.2,
-            "distinctions": 72,
-            "firstClass": 13,
+            "totalStudents": 21,
+            "successRate": 100,
+            "firstClass": 4,
             "students": [
                 {
                     "id": 1,

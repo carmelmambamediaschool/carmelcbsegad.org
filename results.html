@@ -425,7 +425,7 @@
     <section class="results-container">
         <div class="container">
             <div class="academic-year-selector">
-                <h3>Viewing 10th Board (SSC) Result for Academic Year</h3>
+                <h3>Viewing Academic Year</h3>
                 <button id="yearToggleBtn" class="year-toggle-btn">
                     </button>
             </div>
@@ -445,12 +445,8 @@
                         <div class="stat-label">Total Students</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" id="averagePercentage">0%</div>
-                        <div class="stat-label">Average Percentage</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="distinctions">0</div>
-                        <div class="stat-label">Distinctions (90%+)</div>
+                        <div class="stat-number" id="successRate">100%</div>
+                        <div class="stat-label">Success Rate</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number" id="firstClass">0</div>
@@ -613,8 +609,7 @@
             // Update statistics
             updateStatistics(
                 data.totalStudents,
-                data.averagePercentage,
-                data.distinctions,
+                data.successRate,
                 data.firstClass
             );
             
@@ -643,10 +638,10 @@
         }
 
         // Update statistics with animation
-        function updateStatistics(total, average, distinctions, firstClass) {
+        // Update statistics with animation
+        function updateStatistics(total, successRate, firstClass) {
             animateCounter('totalStudents', total);
-            animateCounter('averagePercentage', average, true);
-            animateCounter('distinctions', distinctions);
+            animateCounter('successRate', successRate, true);
             animateCounter('firstClass', firstClass);
         }
 
