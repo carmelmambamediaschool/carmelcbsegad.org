@@ -5,7 +5,7 @@
     { "source": "/submenudisplay/about-us", "destination": "/about.html", "permanent": true },
     { "source": "/submenudisplay/THE%20PATH", "destination": "/about.html", "permanent": true },
     { "source": "/submenudisplay/SCHOOL%20FEES", "destination": "/about.html", "permanent": true },
-    { "source": "/submenudisplay/SCHOOL%20FEES", "destination": "/about.html", "permanent": true },
+    { "source": "/submenudisplay/SCHOOL%20UNIFORM", "destination": "/about.html", "permanent": true },
     { "source": "/submenudisplay/RULES%20STUDENTS", "destination": "/about.html", "permanent": true },
     { "source": "/submenudisplay/aims%20and%20objectives", "destination": "/about.html", "permanent": true },
     { "source": "/submenudisplay/PRINCIPALS%20MESSAGE", "destination": "/index.html", "permanent": true },
