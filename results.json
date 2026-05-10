@@ -1,10 +1,41 @@
 {
-    "2024": {
+    "2026": {
         "10": {
-            "totalStudents": 24,
+            "totalStudents": 174,
             "successRate": 100,
-            "firstClass": 7,
-            "students": []
+            "firstClass": 108,
+            "students": [
+                { "id": 1, "name": "Dhanshri Vasanta Borkar", "percentage": 97.2, "imageId": "1oShhGL-h-Lv7cbN7Ybv43y_ikzRYCoiT", "rank": 1 },
+                { "id": 2, "name": "Maithali Bholeshankar Borkar", "percentage": 96.6, "imageId": "16oBRRvEPt_FcJVgy9QrsYz3uoCxIVPJA", "rank": 2 },
+                { "id": 3, "name": "Riddhi Waman Chudhari", "percentage": 96.2, "imageId": "1Uk5xVXtlOBePctgMW40fSTmEyaLBLgsl", "rank": 3 },
+                { "id": 4, "name": "Devshree Prashant Bankar", "percentage": 95.8, "imageId": "1gA98qwhax7mtH1uVfbwVWNvIGFNqpbup", "rank": 4 },
+                { "id": 5, "name": "Atharv Ajay Lakudwahe", "percentage": 95.4, "imageId": "1ns6izHln4xXqqDErL9EwJBvk0eGphWoQ", "rank": 5 },
+                { "id": 6, "name": "Ishant Manoj Barbatkar", "percentage": 95.4, "imageId": "1lK_ScAiaioFJi8eypdKM0sgXUXLIhL2v", "rank": 6 },
+                { "id": 7, "name": "Sambodhi Sachin Moon", "percentage": 95.4, "imageId": "18ZK6B6TwmG9_Alsj12V-YWeWTxi4RZJR", "rank": 7 },
+                { "id": 8, "name": "Tushant M. Sakhare", "percentage": 95.2, "imageId": "13aLFxtlR3Be98E5JpaYxkHIwxpRLmj8h", "rank": 8 },
+                { "id": 9, "name": "Arushi Arvind Baniya", "percentage": 95.0, "imageId": "132SH23bEIPKVc25D3YIJemklqfVK_z0s", "rank": 9 },
+                { "id": 10, "name": "Manasvi Duryodhan Chandewar", "percentage": 94.8, "imageId": "1ISRWtKad3fPDVXJEg07d3Brvzm8qZP4D", "rank": 10 },
+                { "id": 11, "name": "Soumya Rahul Narule", "percentage": 94.4, "imageId": "1cHnUPeA9KJW_lifuAry2558i8HSfI1P1", "rank": 11 },
+                { "id": 12, "name": "Radha Dilip Kantode", "percentage": 94.4, "imageId": "1UBG_aQZK4ACA8HeEty3IfwpAcVLP8LY2", "rank": 12 },
+                { "id": 13, "name": "Vruttika Pandurang Kamble", "percentage": 94.2, "imageId": "1Kpg0rBkO1ydMc7sAr5-2LXv2zkXoxe5i", "rank": 13 },
+                { "id": 14, "name": "Sujay Rambhau Kohale", "percentage": 94.2, "imageId": "1qy5VH241sm_OqdcEijtdyQZAfhXZNPRu", "rank": 14 },
+                { "id": 15, "name": "Palak Pramod Bhoyar", "percentage": 93.6, "imageId": "1JZq7oALGprJ0Re-fOrQXgP8wq5lpejFG", "rank": 15 },
+                { "id": 16, "name": "Adishri Pradip Bhaisare", "percentage": 93.0, "imageId": "1slBnDqyODyaVFfhglrEqfVdBFLMaC79B", "rank": 16 },
+                { "id": 17, "name": "Prathamesh Sanjay Dangewar", "percentage": 92.8, "imageId": "1Fjz_pfqUSf--p8YBBzCBPiUTxpU5aXaZ", "rank": 17 },
+                { "id": 18, "name": "Arsalarahemin Nashirkha Pathan", "percentage": 92.6, "imageId": "1CzNv99oG209eRKIx23xfpl2mhiH9yFgr", "rank": 18 },
+                { "id": 19, "name": "Harshangi Kailash Sakhare", "percentage": 92.4, "imageId": "1wuJwmgdBAiFHOL2lfQxru-slSOrTIHSM", "rank": 19 },
+                { "id": 20, "name": "Shreya Yogeshwar Gedam", "percentage": 91.8, "imageId": "1fzQMzjZ3WPvvi7S77jjkH3w02adciBSv", "rank": 20 },
+                { "id": 21, "name": "Sahil Pramod Ghosekar", "percentage": 91.8, "imageId": "1HOBUn8jsm7Hyo3CE38iBvQvnsLrChm-_", "rank": 21 },
+                { "id": 22, "name": "Ananya Rupesh Anandpawar", "percentage": 91.8, "imageId": "1nUlthz0y8fs4fG6XAaqIXnumHCDJmzxQ", "rank": 22 },
+                { "id": 23, "name": "Yukta Shailesh Dhawas", "percentage": 91.4, "imageId": "1TccMqKFzf9FbEzNk-z8_e79fT2UFR5zV", "rank": 23 },
+                { "id": 24, "name": "Gargi Tushar Katratwar", "percentage": 91.0, "imageId": "1aBExu1FFBcQoMmfNv50_TwtWG4--ZQzw", "rank": 24 },
+                { "id": 25, "name": "Krupa Jitendra Balekarmkar", "percentage": 90.6, "imageId": "1WUvLBo32Y47AfDd0xK0x_sLmAt-gHWUe", "rank": 25 },
+                { "id": 26, "name": "Shreya Yamaji Undirwade", "percentage": 90.4, "imageId": "1_pgVon1S0ItnwWCrIa4lap-dvvsbVMmE", "rank": 26 },
+                { "id": 27, "name": "Mitali Narendra Pusdekar", "percentage": 90.0, "imageId": "1aaWOwKeMTgrRzH5h6oeq6WjPmrmamrPY", "rank": 27 },
+                { "id": 28, "name": "Karishma Ratnakar Girole", "percentage": 89.8, "imageId": "1aJ6ZJHwgFyBkPp0ojyzjPO9fPu1FCt0I", "rank": 28 },
+                { "id": 29, "name": "Soukhaya Rajesh Channawar", "percentage": 89.8, "imageId": "1JbmhRrzMsdLMSNeomM2J33qeI7QwtFRb", "rank": 29 },
+                { "id": 30, "name": "Celesty Yogendra Shende", "percentage": 89.8, "imageId": "1vKmdtqQCrqLyIwgUy3iroQZwEPkue71a", "rank": 30 }
+            ]
         }
     },
     "2025": {
@@ -17,73 +48,81 @@
                     "id": 1,
                     "name": "Akshay D. Meshram",
                     "percentage": 93.2,
-                    "image": "https://drive.google.com/thumbnail?id=1o1RHTP2CVTfbxRTGvDFACv39B58z5tFP&sz=w400",
+                    "imageId": "1o1RHTP2CVTfbxRTGvDFACv39B58z5tFP",
                     "rank": 1
                 },
                 {
                     "id": 2,
                     "name": "Prajyoti M. Kumbhare",
                     "percentage": 89.8,
-                    "image": "https://drive.google.com/thumbnail?id=108m58vlNMNcBYlpRQmsegsvPbrWmTfp6&sz=w400",
+                    "imageId": "108m58vlNMNcBYlpRQmsegsvPbrWmTfp6",
                     "rank": 2
                 },
                 {
                     "id": 3,
                     "name": "Aniket G. Bhandekar",
                     "percentage": 77.2,
-                    "image": "https://drive.google.com/thumbnail?id=16xBiIJC9hRAgJcIu_G5zInzOmWwmjEbI&sz=w400",
+                    "imageId": "16xBiIJC9hRAgJcIu_G5zInzOmWwmjEbI",
                     "rank": 3
                 },
                 {
                     "id": 4,
                     "name": "Himanshu S. Lohambare",
                     "percentage": 76.4,
-                    "image": "https://drive.google.com/thumbnail?id=1tBpkv2hlrkl4RcFLDpk2I7IwvXvJf4An&sz=w400",
+                    "imageId": "1tBpkv2hlrkl4RcFLDpk2I7IwvXvJf4An",
                     "rank": 4
                 },
                 {
                     "id": 5,
                     "name": "Shruti Khushal Urade",
                     "percentage": 74.8,
-                    "image": "https://drive.google.com/thumbnail?id=1MOF8i0wKWYi-9Jpd0LgOv8yfTPZcr0rW&sz=w400",
+                    "imageId": "1MOF8i0wKWYi-9Jpd0LgOv8yfTPZcr0rW",
                     "rank": 5
                 },
                 {
                     "id": 6,
                     "name": "Swanandi V. Brahmanwade",
                     "percentage": 74.4,
-                    "image": "https://drive.google.com/thumbnail?id=1PeUNeFWbu5T5YkkFMb9Dhmrkrmhr5m05&sz=w400",
+                    "imageId": "1PeUNeFWbu5T5YkkFMb9Dhmrkrmhr5m05",
                     "rank": 6
                 },
                 {
                     "id": 7,
                     "name": "Priya Subhash Mandal",
                     "percentage": 72.6,
-                    "image": "https://drive.google.com/thumbnail?id=1uZ0JdmdrNl2E2CP-aFpKPCJn5bpDHSnw&sz=w400",
+                    "imageId": "1uZ0JdmdrNl2E2CP-aFpKPCJn5bpDHSnw",
                     "rank": 7
                 },
                 {
                     "id": 8,
                     "name": "Aditi Mohan Warjurkar",
                     "percentage": 71.4,
-                    "image": "https://drive.google.com/thumbnail?id=1P9FUVVSIKB-wGWmFsfNLvntNsPIFLbpd&sz=w400",
+                    "imageId": "1P9FUVVSIKB-wGWmFsfNLvntNsPIFLbpd",
                     "rank": 8
                 },
                 {
                     "id": 9,
                     "name": "Purvansh H. Meshram",
                     "percentage": 69.4,
-                    "image": "https://drive.google.com/thumbnail?id=1DZJ0Ctzivaqtw7y5mbx8c_ClSy3_eqDf&sz=w400",
+                    "imageId": "1DZJ0Ctzivaqtw7y5mbx8c_ClSy3_eqDf",
                     "rank": 9
                 },
                 {
                     "id": 10,
                     "name": "Nivedita Kaliram Usendi",
                     "percentage": 67.4,
-                    "image": "https://drive.google.com/thumbnail?id=196UD23Krr_gIMm4HPKujsOMx9orTxT6U&sz=w400",
+                    "imageId": "196UD23Krr_gIMm4HPKujsOMx9orTxT6U",
                     "rank": 10
                 }
             ]
+        }
+    },
+    "2024": {
+        "10": {
+            "totalStudents": 24,
+            "successRate": 100,
+            "firstClass": 7,
+            "students": []
         }
     }
 }

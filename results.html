@@ -534,15 +534,14 @@
                 if (!response.ok) throw new Error('Network response was not ok');
                 resultsData = await response.json();
                 
-                // --- THE MAGIC HAPPENS HERE ---
                 // 1. Get all the year keys from the JSON and sort them highest to lowest
                 const years = Object.keys(resultsData).sort((a, b) => b - a);
                 
-                // 2. Automatically build the labels based on whatever is in the JSON
+                // 2. Automatically build the labels
                 availableYears = years.map(year => {
                     return {
                         key: year,
-                        label: `${parseInt(year) - 1}-${year}` // e.g., turns "2024" into "2023-2024"
+                        label: `${parseInt(year) - 1}-${year}`
                     };
                 });
                 
@@ -559,14 +558,13 @@
                 document.getElementById('resultsGrid').innerHTML = '<div class="loading"><i class="fas fa-exclamation-triangle"></i><p>Failed to load results data. Please ensure results.json is available and properly formatted.</p></div>';
             }
 
-            // Setup toggle button click listener
+            // Setup toggle button click listener for ANY number of years
             const toggleBtn = document.getElementById('yearToggleBtn');
             if(toggleBtn) {
                 toggleBtn.addEventListener('click', function() {
-                    // Only toggle if we have more than 1 year of data
                     if (availableYears.length > 1) {
-                        // Switch between 0 and 1
-                        currentYearIndex = currentYearIndex === 0 ? 1 : 0;
+                        // Cycle sequentially through all available years
+                        currentYearIndex = (currentYearIndex + 1) % availableYears.length;
                         updateToggleUI();
                         loadResults(availableYears[currentYearIndex].key);
                     }
@@ -574,27 +572,22 @@
             }
         });
 
-        // Updates the text and arrow direction of the button based on active year
+        // Updates the text and icon of the button based on active year
         function updateToggleUI() {
             const toggleBtn = document.getElementById('yearToggleBtn');
             if (!toggleBtn || availableYears.length === 0) return;
             
-            // If there's only one year in the JSON, just show the label without arrows
             if (availableYears.length === 1) {
-                toggleBtn.innerHTML = `<span>${availableYears[0].label}</span>`;
+                toggleBtn.innerHTML = `<span>${availableYears.label}</span>`;
                 toggleBtn.style.cursor = 'default';
                 return;
             }
 
-            if (currentYearIndex === 0) {
-                // Showing Current Year: Arrow points LEFT to indicate going BACK to Previous Year
-                toggleBtn.innerHTML = `<i class="fas fa-chevron-left"></i> <span>${availableYears[0].label}</span>`;
-            } else {
-                // Showing Previous Year: Arrow points RIGHT to indicate going FORWARD to Current Year
-                toggleBtn.innerHTML = `<span>${availableYears[1].label}</span> <i class="fas fa-chevron-right"></i>`;
-            }
+            // Show current active year and a sync icon to indicate it cycles
+            toggleBtn.innerHTML = `<span>${availableYears[currentYearIndex].label}</span> <i class="fas fa-sync-alt" style="margin-left: 8px;"></i>`;
         }
 
+        // Load results into DOM
         // Load results into DOM
         function loadResults(yearKey) {
             const resultsGrid = document.getElementById('resultsGrid');
@@ -602,7 +595,7 @@
             
             if (!data) {
                 resultsGrid.innerHTML = '<div class="loading"><i class="fas fa-exclamation-circle"></i><p>No results available for this selection</p></div>';
-                updateStatistics(0, 0, 0, 0);
+                updateStatistics(0, 0, 0);
                 return;
             }
             
@@ -617,12 +610,18 @@
             if (data.students && data.students.length > 0) {
                 let html = '';
                 data.students.forEach(student => {
+                    // Dynamically construct the thumbnail URL using the ID from JSON
+                    // Fallback to a placeholder if imageId is missing
+                    const imgUrl = student.imageId 
+                        ? `https://drive.google.com/thumbnail?id=${student.imageId}&sz=w400`
+                        : `images/placeholder-student.webp`; 
+
                     html += `
                     <div class="result-card">
                         ${student.rank === 1 ? '<div class="topper-badge">School Topper</div>' : ''}
                         <div class="rank-badge">${student.rank}</div>
                         <div class="student-image">
-                            <img src="${student.image}" alt="${student.name}">
+                            <img src="${imgUrl}" alt="${student.name}">
                         </div>
                         <div class="student-info">
                             <div class="student-name">${student.name}</div>
@@ -637,7 +636,6 @@
             }
         }
 
-        // Update statistics with animation
         // Update statistics with animation
         function updateStatistics(total, successRate, firstClass) {
             animateCounter('totalStudents', total);
